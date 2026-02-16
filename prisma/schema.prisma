@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  hashedPassword String
+  role           String    @default("surgeon")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  surgeon        Surgeon?
+}
+
+model Surgeon {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  firstName       String
+  lastName        String
+  npiNumber       String   @unique
+  profileImageUrl String?
+
+  specialty       String
+  subSpecialty    String?
+  boardCertified  Boolean  @default(false)
+  fellowshipTrained Boolean @default(false)
+  yearsInPractice Int?
+
+  practiceName    String?
+  hospitalAffiliation String?
+  city            String
+  state           String
+  zipCode         String?
+  phone           String?
+
+  onboardingComplete Boolean @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  conferences     SurgeonConference[]
+
+  @@index([lastName])
+  @@index([state])
+  @@index([specialty])
+}
+
+model Conference {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  fullName    String
+  description String?
+  website     String?
+  createdAt   DateTime @default(now())
+
+  surgeons    SurgeonConference[]
+}
+
+model SurgeonConference {
+  id           String   @id @default(cuid())
+  surgeonId    String
+  conferenceId String
+  role         String?
+  year         Int?
+  createdAt    DateTime @default(now())
+
+  surgeon      Surgeon    @relation(fields: [surgeonId], references: [id], onDelete: Cascade)
+  conference   Conference @relation(fields: [conferenceId], references: [id], onDelete: Cascade)
+
+  @@unique([surgeonId, conferenceId, year])
+}
