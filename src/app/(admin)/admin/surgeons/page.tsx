@@ -45,8 +45,7 @@ export default function AdminSurgeonsPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-text-primary flex items-center gap-2">
-            <Database className="h-7 w-7 text-primary-500" />
+          <h1 className="text-3xl font-bold text-text-primary">
             All Surgeons
           </h1>
           <p className="text-sm text-text-muted mt-1">{total} registered surgeons</p>

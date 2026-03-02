@@ -1,36 +1,99 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SpineSurgNet
 
-## Getting Started
+A professional networking platform for spine surgeons, built with Next.js, Prisma, and PostgreSQL.
 
-First, run the development server:
+## Features
+
+- Surgeon directory with advanced filtering (specialty, location, conference)
+- User authentication with role-based access (surgeon / admin)
+- Surgeon profile management with avatar uploads
+- Conference tracking and affiliation management
+- Admin dashboard with analytics and data export
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router)
+- **Language:** TypeScript
+- **Database:** PostgreSQL with Prisma ORM
+- **Auth:** NextAuth v5 (JWT strategy)
+- **Styling:** Tailwind CSS 4
+- **Validation:** Zod
+
+## Local Development
 
 ```bash
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your local database URL
+
+# Push database schema
+npx prisma db push
+
+# Seed the database
+npm run db:seed
+
+# Start dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000 to view the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deploy to Vercel (via GitHub)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Push to GitHub
 
-## Learn More
+```bash
+git remote add origin https://github.com/YOUR_USERNAME/SpineSurgNet.git
+git push -u origin main
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 2. Import to Vercel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Go to [vercel.com/new](https://vercel.com/new)
+2. Import your GitHub repository
+3. Vercel auto-detects Next.js -- no build settings needed
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. Add a PostgreSQL Database
 
-## Deploy on Vercel
+1. In your Vercel project, go to **Storage** > **Create Database** > **Postgres**
+2. This auto-populates `DATABASE_URL` and `DIRECT_URL` environment variables
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 4. Set Environment Variables
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+In Vercel project settings > **Environment Variables**, add:
+
+| Variable | Value |
+|---|---|
+| `NEXTAUTH_SECRET` | Generate with `openssl rand -base64 32` |
+| `NEXTAUTH_URL` | Your Vercel URL (e.g. `https://spinesurgnet.vercel.app`) |
+
+`DATABASE_URL` and `DIRECT_URL` are set automatically by Vercel Postgres.
+
+### 5. Deploy & Seed
+
+Vercel deploys automatically on push. After the first deploy:
+
+```bash
+# Run migrations against production DB
+npx prisma db push
+
+# Seed conferences and admin user
+npm run db:seed
+```
+
+Or use the Vercel CLI:
+
+```bash
+npx vercel env pull .env.local
+npx prisma db push
+npm run db:seed
+```
+
+## Default Admin Credentials
+
+After seeding: `admin@spinesurgnet.com` / `admin123`
+
+Change the admin password immediately after first login in production.

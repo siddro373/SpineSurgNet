@@ -5,14 +5,18 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Card from "@/components/ui/Card";
 import Avatar from "@/components/ui/Avatar";
-import Badge from "@/components/ui/Badge";
 import Spinner from "@/components/ui/Spinner";
-import { LayoutDashboard, Users, MapPin, TrendingUp, ArrowRight } from "lucide-react";
+import { Users, MapPin, BookOpen, Stethoscope, ArrowRight } from "lucide-react";
 
 export default function DashboardPage() {
   const { data: session } = useSession();
   const [recentSurgeons, setRecentSurgeons] = useState<any[]>([]);
-  const [stats, setStats] = useState({ total: 0, inSpecialty: 0, inState: 0 });
+  const [stats, setStats] = useState({
+    total: 0,
+    inSpecialty: 0,
+    inState: 0,
+    totalConferences: 0,
+  });
   const [loading, setLoading] = useState(true);
 
   const userName = session?.user?.name || "Surgeon";
@@ -20,10 +24,20 @@ export default function DashboardPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch("/api/surgeons?limit=5&page=1");
-        const data = await res.json();
-        setRecentSurgeons(data.data || []);
-        setStats((prev) => ({ ...prev, total: data.total || 0 }));
+        const [surgeonsRes, statsRes] = await Promise.all([
+          fetch("/api/surgeons?limit=5&page=1"),
+          fetch("/api/dashboard/stats"),
+        ]);
+        const surgeonsData = await surgeonsRes.json();
+        const statsData = await statsRes.json();
+
+        setRecentSurgeons(surgeonsData.data || []);
+        setStats({
+          total: surgeonsData.total || 0,
+          inSpecialty: statsData.inSpecialty || 0,
+          inState: statsData.inState || 0,
+          totalConferences: statsData.totalConferences || 0,
+        });
       } catch {}
       setLoading(false);
     }
@@ -33,50 +47,63 @@ export default function DashboardPage() {
   return (
     <div>
       {/* Welcome banner */}
-      <Card className="mb-6 bg-gradient-to-r from-primary-500 to-primary-700 text-white border-none">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold">Welcome back, Dr. {userName.split(" ").pop()}</h1>
-            <p className="mt-1 text-primary-100">
-              Connect with spine surgeons and explore the latest in spine implant technology.
-            </p>
-          </div>
-          <LayoutDashboard className="h-12 w-12 text-primary-200 hidden sm:block" />
+      <div className="mb-6 rounded-2xl bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 p-6 text-white shadow-lg overflow-hidden relative">
+        <div className="absolute inset-0 opacity-10" style={{
+          backgroundImage: "radial-gradient(circle at 20% 50%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px)",
+          backgroundSize: "30px 30px"
+        }} />
+        <div className="relative">
+          <p className="text-primary-100 text-sm font-medium">Welcome back</p>
+          <h1 className="text-3xl font-bold mt-1">Dr. {userName.split(" ").pop()}</h1>
+          <p className="mt-2 text-primary-100 text-sm max-w-sm">
+            Stay connected with the spine surgery community.
+          </p>
         </div>
-      </Card>
+      </div>
 
       {/* Quick stats */}
-      <div className="grid gap-4 sm:grid-cols-3 mb-6">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6">
         <Card>
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-50">
-              <Users className="h-5 w-5 text-primary-500" />
+          <div className="flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 shrink-0">
+              <Users className="h-6 w-6 text-primary-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-text-primary">{stats.total}</p>
-              <p className="text-xs text-text-muted">Total Surgeons</p>
+              <p className="text-3xl font-bold text-text-primary">{stats.total}</p>
+              <p className="text-xs font-medium text-text-muted uppercase tracking-wide">Total Surgeons</p>
             </div>
           </div>
         </Card>
         <Card>
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-50">
-              <TrendingUp className="h-5 w-5 text-success" />
+          <div className="flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary-100 shrink-0">
+              <Stethoscope className="h-6 w-6 text-secondary-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-text-primary">{recentSurgeons.length}</p>
-              <p className="text-xs text-text-muted">Recently Joined</p>
+              <p className="text-3xl font-bold text-text-primary">{stats.inSpecialty}</p>
+              <p className="text-xs font-medium text-text-muted uppercase tracking-wide">In My Specialty</p>
             </div>
           </div>
         </Card>
         <Card>
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-50">
-              <MapPin className="h-5 w-5 text-purple-500" />
+          <div className="flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-green-100 shrink-0">
+              <MapPin className="h-6 w-6 text-green-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-text-primary">8</p>
-              <p className="text-xs text-text-muted">Conferences Tracked</p>
+              <p className="text-3xl font-bold text-text-primary">{stats.inState}</p>
+              <p className="text-xs font-medium text-text-muted uppercase tracking-wide">In My State</p>
+            </div>
+          </div>
+        </Card>
+        <Card>
+          <div className="flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-100 shrink-0">
+              <BookOpen className="h-6 w-6 text-purple-600" />
+            </div>
+            <div>
+              <p className="text-3xl font-bold text-text-primary">{stats.totalConferences}</p>
+              <p className="text-xs font-medium text-text-muted uppercase tracking-wide">Conferences</p>
             </div>
           </div>
         </Card>
@@ -85,8 +112,8 @@ export default function DashboardPage() {
       {/* Recent surgeons */}
       <Card>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-text-primary">Recently Joined</h2>
-          <Link href="/directory" className="text-sm text-primary-500 hover:text-primary-600 flex items-center gap-1">
+          <h2 className="text-lg font-bold text-text-primary">Recently Joined</h2>
+          <Link href="/directory" className="text-sm font-semibold text-primary-500 hover:text-primary-600 flex items-center gap-1">
             View all <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -96,17 +123,16 @@ export default function DashboardPage() {
         ) : recentSurgeons.length === 0 ? (
           <p className="text-sm text-text-muted py-4 text-center">No surgeons registered yet. Be the first!</p>
         ) : (
-          <div className="divide-y divide-border">
+          <div className="grid gap-3 sm:grid-cols-2">
             {recentSurgeons.map((surgeon) => (
-              <Link key={surgeon.id} href={`/surgeon/${surgeon.id}`} className="flex items-center gap-3 py-3 hover:bg-surface-light -mx-6 px-6 transition-colors">
-                <Avatar name={`${surgeon.firstName} ${surgeon.lastName}`} size="sm" />
+              <Link key={surgeon.id} href={`/surgeon/${surgeon.id}`} className="flex items-center gap-3 p-3 rounded-xl hover:bg-surface transition-colors">
+                <Avatar name={`${surgeon.firstName} ${surgeon.lastName}`} src={surgeon.profileImageUrl} size="md" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-text-primary truncate">
+                  <p className="text-sm font-semibold text-text-primary truncate">
                     Dr. {surgeon.firstName} {surgeon.lastName}
                   </p>
                   <p className="text-xs text-text-muted">{surgeon.specialty}</p>
                 </div>
-                <span className="text-xs text-text-light">{surgeon.city}, {surgeon.state}</span>
               </Link>
             ))}
           </div>
@@ -114,15 +140,15 @@ export default function DashboardPage() {
       </Card>
 
       {/* Ulrich Medical CTA */}
-      <Card className="mt-6 border-primary-200 bg-primary-50">
+      <Card variant="warm" className="mt-6">
         <div className="flex items-center gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-500 shrink-0">
-            <span className="text-lg font-bold text-white">U</span>
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-400 to-primary-600 shadow-sm shrink-0">
+            <span className="text-lg font-black text-white">U</span>
           </div>
           <div>
-            <h3 className="font-semibold text-text-primary">Ulrich Medical USA</h3>
+            <h3 className="font-bold text-text-primary">Ulrich Medical USA</h3>
             <p className="text-sm text-text-muted mt-0.5">
-              Explore the latest spine implant systems and surgical solutions. Stay informed about upcoming events and product demonstrations.
+              Explore the latest spine implant systems and surgical solutions.
             </p>
           </div>
         </div>

@@ -20,7 +20,7 @@ export default function Sidebar({ className }: SidebarProps) {
   const pathname = usePathname();
 
   return (
-    <aside className={cn("fixed left-0 top-16 bottom-0 w-64 border-r border-border bg-surface-light overflow-y-auto", className)}>
+    <aside className={cn("fixed left-0 top-16 bottom-0 w-64 border-r border-border bg-white overflow-y-auto", className)}>
       <nav className="flex flex-col gap-1 p-4">
         {navItems.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
@@ -29,9 +29,9 @@ export default function Sidebar({ className }: SidebarProps) {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
                 isActive
-                  ? "border-l-3 border-primary-500 bg-primary-50 text-primary-600"
+                  ? "bg-primary-50 text-primary-700 font-semibold"
                   : "text-text-muted hover:bg-surface hover:text-text-primary"
               )}
             >
@@ -42,10 +42,9 @@ export default function Sidebar({ className }: SidebarProps) {
         })}
       </nav>
 
-      {/* Ulrich Medical branding */}
       <div className="absolute bottom-0 left-0 right-0 border-t border-border p-4">
         <p className="text-xs text-text-light text-center">Powered by</p>
-        <p className="text-xs font-semibold text-primary-500 text-center">Ulrich Medical USA</p>
+        <p className="text-xs font-semibold text-primary-600 text-center">Ulrich Medical USA</p>
       </div>
     </aside>
   );

@@ -58,13 +58,12 @@ export default function SettingsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-text-primary mb-6 flex items-center gap-2">
-        <Settings className="h-7 w-7 text-primary-500" />
+      <h1 className="text-3xl font-bold text-text-primary mb-6">
         Account Settings
       </h1>
 
       <Card>
-        <h2 className="text-lg font-semibold text-text-primary mb-4">Change Password</h2>
+        <h2 className="text-lg font-bold text-text-primary mb-4">Change Password</h2>
 
         {error && (
           <div className="mb-4 rounded-md bg-error-light p-3 text-sm text-error">{error}</div>
@@ -101,7 +100,7 @@ export default function SettingsPage() {
       </Card>
 
       <Card className="mt-6">
-        <h2 className="text-lg font-semibold text-text-primary mb-2">Notification Preferences</h2>
+        <h2 className="text-lg font-bold text-text-primary mb-2">Notification Preferences</h2>
         <p className="text-sm text-text-muted">Coming soon. You&apos;ll be able to manage your email and push notification preferences here.</p>
       </Card>
     </div>

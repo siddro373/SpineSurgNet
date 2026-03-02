@@ -50,7 +50,7 @@ export async function PATCH(
   const { id } = await params;
 
   // Verify ownership
-  if ((session.user as any).surgeonId !== id && (session.user as any).role !== "admin") {
+  if (session.user.surgeonId !== id && session.user.role !== "admin") {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
@@ -65,15 +65,38 @@ export async function PATCH(
       );
     }
 
+    const { conferences, ...profileData } = parsed.data;
+
     const surgeon = await prisma.surgeon.update({
       where: { id },
-      data: parsed.data,
+      data: profileData,
       include: {
         conferences: {
           include: { conference: true },
         },
       },
     });
+
+    if (conferences !== undefined) {
+      await prisma.$transaction([
+        prisma.surgeonConference.deleteMany({ where: { surgeonId: id } }),
+        ...(conferences.length > 0
+          ? [prisma.surgeonConference.createMany({
+              data: conferences.map((c) => ({
+                surgeonId: id,
+                conferenceId: c.conferenceId,
+                role: c.role || null,
+              })),
+            })]
+          : []),
+      ]);
+
+      const updated = await prisma.surgeon.findUnique({
+        where: { id },
+        include: { conferences: { include: { conference: true } } },
+      });
+      return NextResponse.json(updated);
+    }
 
     return NextResponse.json(surgeon);
   } catch (error) {

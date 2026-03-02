@@ -20,8 +20,8 @@ export async function GET(request: NextRequest) {
 
   if (search) {
     where.OR = [
-      { firstName: { contains: search } },
-      { lastName: { contains: search } },
+      { firstName: { contains: search, mode: "insensitive" as const } },
+      { lastName: { contains: search, mode: "insensitive" as const } },
       { npiNumber: { contains: search } },
     ];
   }

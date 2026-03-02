@@ -174,22 +174,22 @@ export default function RegisterPage() {
             <span
               key={step}
               className={`text-xs font-medium ${
-                i <= currentStep ? "text-primary-500" : "text-text-light"
+                i < currentStep ? "text-primary-600" : i === currentStep ? "text-primary-500" : "text-text-light"
               }`}
             >
               {step}
             </span>
           ))}
         </div>
-        <div className="h-2 rounded-full bg-surface">
+        <div className="h-2.5 rounded-full bg-border">
           <div
-            className="h-2 rounded-full bg-primary-500 transition-all duration-300"
+            className="h-2.5 rounded-full bg-gradient-to-r from-primary-400 to-primary-600 transition-all duration-500"
             style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
           />
         </div>
       </div>
 
-      <h2 className="mb-4 text-lg font-semibold text-text-primary">
+      <h2 className="mb-4 text-lg font-bold text-text-primary">
         {currentStep === 0 && "Create Your Account"}
         {currentStep === 1 && "Your Identity"}
         {currentStep === 2 && "Professional Details"}

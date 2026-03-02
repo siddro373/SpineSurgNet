@@ -4,13 +4,18 @@ interface CardProps {
   children: React.ReactNode;
   className?: string;
   padding?: "default" | "compact" | "none";
+  variant?: "default" | "warm";
 }
 
-export default function Card({ children, className, padding = "default" }: CardProps) {
+export default function Card({ children, className, padding = "default", variant = "default" }: CardProps) {
   return (
     <div
       className={cn(
-        "rounded-lg border border-border bg-white shadow-sm",
+        "rounded-2xl border shadow-sm transition-shadow",
+        {
+          "border-border bg-white": variant === "default",
+          "border-primary-100 bg-surface-warm": variant === "warm",
+        },
         {
           "p-6": padding === "default",
           "p-4": padding === "compact",

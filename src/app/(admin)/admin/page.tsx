@@ -23,8 +23,7 @@ export default function AdminDashboard() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-text-primary mb-6 flex items-center gap-2">
-        <BarChart3 className="h-7 w-7 text-primary-500" />
+      <h1 className="text-3xl font-bold text-text-primary mb-6">
         Admin Dashboard
       </h1>
 
@@ -32,7 +31,7 @@ export default function AdminDashboard() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
         <Card>
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-50">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary-100">
               <Users className="h-5 w-5 text-primary-500" />
             </div>
             <div>
@@ -43,7 +42,7 @@ export default function AdminDashboard() {
         </Card>
         <Card>
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-50">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-green-100">
               <TrendingUp className="h-5 w-5 text-success" />
             </div>
             <div>
@@ -54,7 +53,7 @@ export default function AdminDashboard() {
         </Card>
         <Card>
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-50">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-purple-100">
               <Calendar className="h-5 w-5 text-purple-500" />
             </div>
             <div>
@@ -65,7 +64,7 @@ export default function AdminDashboard() {
         </Card>
         <Card>
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-100">
               <BarChart3 className="h-5 w-5 text-amber-500" />
             </div>
             <div>
@@ -79,7 +78,7 @@ export default function AdminDashboard() {
       <div className="grid gap-6 lg:grid-cols-2">
         {/* By Specialty */}
         <Card>
-          <h2 className="text-lg font-semibold text-text-primary mb-4">Surgeons by Specialty</h2>
+          <h2 className="text-lg font-bold text-text-primary mb-4">Surgeons by Specialty</h2>
           {stats?.bySpecialty?.length > 0 ? (
             <div className="space-y-3">
               {stats.bySpecialty.map((item: any) => (
@@ -104,7 +103,7 @@ export default function AdminDashboard() {
 
         {/* By State */}
         <Card>
-          <h2 className="text-lg font-semibold text-text-primary mb-4">Top States</h2>
+          <h2 className="text-lg font-bold text-text-primary mb-4">Top States</h2>
           {stats?.byState?.length > 0 ? (
             <div className="space-y-3">
               {stats.byState.slice(0, 10).map((item: any) => (
@@ -129,11 +128,11 @@ export default function AdminDashboard() {
 
         {/* By Conference */}
         <Card className="lg:col-span-2">
-          <h2 className="text-lg font-semibold text-text-primary mb-4">Conference Affiliations</h2>
+          <h2 className="text-lg font-bold text-text-primary mb-4">Conference Affiliations</h2>
           {stats?.byConference?.length > 0 ? (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {stats.byConference.map((item: any) => (
-                <div key={item.name} className="rounded-lg border border-border p-3 text-center">
+                <div key={item.name} className="rounded-xl border border-border p-3 text-center">
                   <p className="text-2xl font-bold text-primary-500">{item.count}</p>
                   <p className="text-sm font-medium text-text-primary">{item.name}</p>
                 </div>

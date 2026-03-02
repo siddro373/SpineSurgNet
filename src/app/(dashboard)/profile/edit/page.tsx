@@ -9,8 +9,20 @@ import Select from "@/components/ui/Select";
 import Button from "@/components/ui/Button";
 import Spinner from "@/components/ui/Spinner";
 import Avatar from "@/components/ui/Avatar";
-import { SPECIALTIES, SUB_SPECIALTIES, US_STATES } from "@/lib/constants";
+import { SPECIALTIES, SUB_SPECIALTIES, US_STATES, CONFERENCE_ROLES } from "@/lib/constants";
 import { Camera } from "lucide-react";
+
+interface ConferenceOption {
+  id: string;
+  name: string;
+  fullName: string;
+}
+
+interface SelectedConference {
+  conferenceId: string;
+  name: string;
+  role: string;
+}
 
 export default function EditProfilePage() {
   const { data: session } = useSession();
@@ -22,6 +34,8 @@ export default function EditProfilePage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+  const [conferences, setConferences] = useState<ConferenceOption[]>([]);
+  const [selectedConferences, setSelectedConferences] = useState<SelectedConference[]>([]);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -38,13 +52,15 @@ export default function EditProfilePage() {
     phone: "",
   });
 
-  const surgeonId = (session?.user as any)?.surgeonId;
+  const surgeonId = session?.user?.surgeonId;
 
   useEffect(() => {
     if (!surgeonId) return;
-    fetch(`/api/surgeons/${surgeonId}`)
-      .then((r) => r.json())
-      .then((data) => {
+    Promise.all([
+      fetch(`/api/surgeons/${surgeonId}`).then((r) => r.json()),
+      fetch("/api/conferences").then((r) => r.json()),
+    ])
+      .then(([data, conferencesData]) => {
         setFormData({
           firstName: data.firstName || "",
           lastName: data.lastName || "",
@@ -61,13 +77,37 @@ export default function EditProfilePage() {
           phone: data.phone || "",
         });
         setProfileImageUrl(data.profileImageUrl || null);
+        setConferences(conferencesData);
+        if (data.conferences) {
+          setSelectedConferences(
+            data.conferences.map((c: any) => ({
+              conferenceId: c.conferenceId,
+              name: c.conference.name,
+              role: c.role || "Attendee",
+            }))
+          );
+        }
       })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [surgeonId]);
 
-  const updateField = (field: string, value: any) => {
+  const updateField = (field: string, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const toggleConference = (conf: ConferenceOption) => {
+    setSelectedConferences((prev) => {
+      const exists = prev.find((c) => c.conferenceId === conf.id);
+      if (exists) return prev.filter((c) => c.conferenceId !== conf.id);
+      return [...prev, { conferenceId: conf.id, name: conf.name, role: "Attendee" }];
+    });
+  };
+
+  const updateConferenceRole = (conferenceId: string, role: string) => {
+    setSelectedConferences((prev) =>
+      prev.map((c) => (c.conferenceId === conferenceId ? { ...c, role } : c))
+    );
   };
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,12 +148,16 @@ export default function EditProfilePage() {
     setSaving(true);
 
     try {
-      const payload: any = { ...formData };
+      const payload: Record<string, unknown> = { ...formData };
       if (payload.yearsInPractice) {
-        payload.yearsInPractice = parseInt(payload.yearsInPractice);
+        payload.yearsInPractice = parseInt(payload.yearsInPractice as string);
       } else {
         delete payload.yearsInPractice;
       }
+      payload.conferences = selectedConferences.map((c) => ({
+        conferenceId: c.conferenceId,
+        role: c.role,
+      }));
 
       const res = await fetch(`/api/surgeons/${surgeonId}`, {
         method: "PATCH",
@@ -186,7 +230,7 @@ export default function EditProfilePage() {
           </div>
           <div>
             <p className="text-sm font-medium text-text-primary">Profile Photo</p>
-            <p className="text-xs text-text-muted">JPEG, PNG, or WebP. Max 5MB.</p>
+            <p className="text-xs text-text-muted">JPEG, PNG, or WebP. Max 2MB.</p>
           </div>
         </div>
 
@@ -226,6 +270,50 @@ export default function EditProfilePage() {
           </div>
 
           <Input label="Phone" value={formData.phone} onChange={(e) => updateField("phone", e.target.value)} placeholder="(555) 123-4567" />
+
+          {/* Conference Affiliations */}
+          <div>
+            <h3 className="text-sm font-semibold text-text-primary mb-3">Conference Affiliations</h3>
+            <p className="text-xs text-text-muted mb-3">
+              Select conferences you attend or are affiliated with:
+            </p>
+            <div className="space-y-2">
+              {conferences.map((conf) => {
+                const isSelected = selectedConferences.some((c) => c.conferenceId === conf.id);
+                const selected = selectedConferences.find((c) => c.conferenceId === conf.id);
+                return (
+                  <div key={conf.id} className="rounded-lg border border-border p-3">
+                    <label className="flex items-start gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => toggleConference(conf)}
+                        className="mt-0.5 h-4 w-4 rounded border-border text-primary-500"
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-text-primary text-sm">{conf.name}</span>
+                          <span className="text-xs text-text-muted">{conf.fullName}</span>
+                        </div>
+                        {isSelected && (
+                          <select
+                            value={selected?.role || "Attendee"}
+                            onChange={(e) => updateConferenceRole(conf.id, e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
+                            className="mt-2 h-8 rounded border border-border bg-white px-2 text-xs"
+                          >
+                            {CONFERENCE_ROLES.map((role) => (
+                              <option key={role} value={role}>{role}</option>
+                            ))}
+                          </select>
+                        )}
+                      </div>
+                    </label>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
 
           <div className="flex gap-3 justify-end">
             <Button type="button" variant="secondary" onClick={() => router.back()}>Cancel</Button>

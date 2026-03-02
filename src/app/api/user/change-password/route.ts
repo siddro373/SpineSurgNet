@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     const { currentPassword, newPassword } = parsed.data;
 
     const user = await prisma.user.findUnique({
-      where: { id: (session.user as any).id },
+      where: { id: session.user.id },
     });
 
     if (!user) {

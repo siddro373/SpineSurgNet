@@ -41,6 +41,10 @@ export const updateSurgeonSchema = z.object({
   state: z.string().min(2).optional(),
   zipCode: z.string().optional(),
   phone: z.string().optional(),
+  conferences: z.array(z.object({
+    conferenceId: z.string(),
+    role: z.string().optional(),
+  })).optional(),
 });
 
 export type LoginInput = z.infer<typeof loginSchema>;

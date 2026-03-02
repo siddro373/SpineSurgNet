@@ -42,9 +42,10 @@ export default function LoginPage() {
 
   return (
     <Card>
-      <h2 className="mb-6 text-xl font-semibold text-text-primary text-center">
-        Sign in to your account
+      <h2 className="mb-1 text-2xl font-bold text-text-primary text-center">
+        Welcome back
       </h2>
+      <p className="mb-6 text-sm text-text-muted text-center">Sign in to your account</p>
 
       {error && (
         <div className="mb-4 rounded-md bg-error-light p-3 text-sm text-error">

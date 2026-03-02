@@ -30,7 +30,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="inline-flex h-9 w-9 items-center justify-center rounded-md text-text-muted hover:bg-surface hover:text-text-primary disabled:pointer-events-none disabled:opacity-50"
+        className="inline-flex h-9 w-9 items-center justify-center rounded-full text-text-muted hover:bg-surface hover:text-text-primary disabled:pointer-events-none disabled:opacity-50"
       >
         <ChevronLeft className="h-4 w-4" />
       </button>
@@ -42,7 +42,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
             key={page}
             onClick={() => onPageChange(page)}
             className={cn(
-              "inline-flex h-9 w-9 items-center justify-center rounded-md text-sm font-medium",
+              "inline-flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium",
               currentPage === page
                 ? "bg-primary-500 text-white"
                 : "text-text-secondary hover:bg-surface"
@@ -55,7 +55,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="inline-flex h-9 w-9 items-center justify-center rounded-md text-text-muted hover:bg-surface hover:text-text-primary disabled:pointer-events-none disabled:opacity-50"
+        className="inline-flex h-9 w-9 items-center justify-center rounded-full text-text-muted hover:bg-surface hover:text-text-primary disabled:pointer-events-none disabled:opacity-50"
       >
         <ChevronRight className="h-4 w-4" />
       </button>

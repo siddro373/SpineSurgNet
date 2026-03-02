@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
 
 export async function POST(request: NextRequest) {
   const session = await auth();
@@ -10,7 +8,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const surgeonId = (session.user as any).surgeonId;
+  const surgeonId = session.user.surgeonId;
   if (!surgeonId) {
     return NextResponse.json({ error: "No surgeon profile" }, { status: 400 });
   }
@@ -32,25 +30,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
+    // Validate file size (max 2MB for data URL storage)
+    if (file.size > 2 * 1024 * 1024) {
       return NextResponse.json(
-        { error: "File too large. Maximum size is 5MB." },
+        { error: "File too large. Maximum size is 2MB." },
         { status: 400 }
       );
     }
 
-    const ext = file.type.split("/")[1] === "jpeg" ? "jpg" : file.type.split("/")[1];
-    const filename = `${surgeonId}-${Date.now()}.${ext}`;
-
-    const uploadsDir = path.join(process.cwd(), "public", "uploads");
-    await mkdir(uploadsDir, { recursive: true });
-
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    await writeFile(path.join(uploadsDir, filename), buffer);
-
-    const profileImageUrl = `/uploads/${filename}`;
+    const base64 = buffer.toString("base64");
+    const profileImageUrl = `data:${file.type};base64,${base64}`;
 
     await prisma.surgeon.update({
       where: { id: surgeonId },

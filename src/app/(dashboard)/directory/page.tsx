@@ -102,7 +102,7 @@ function DirectoryContent() {
       ) : (
         <>
           <p className="mb-4 text-sm text-text-muted">{total} surgeon{total !== 1 ? "s" : ""} found</p>
-          <div className="grid gap-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {surgeons.map((surgeon) => (
               <SurgeonCard key={surgeon.id} surgeon={surgeon} />
             ))}
@@ -120,12 +120,11 @@ export default function DirectoryPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-text-primary flex items-center gap-2">
-          <Users className="h-7 w-7 text-primary-500" />
+        <h1 className="text-3xl font-bold text-text-primary">
           Surgeon Directory
         </h1>
-        <p className="text-sm text-text-muted mt-1">
-          Browse and connect with spine surgeons in the network
+        <p className="text-text-muted mt-1">
+          Connect with spine surgery specialists
         </p>
       </div>
 
