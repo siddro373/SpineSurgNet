@@ -16,10 +16,10 @@ export default function AdminSidebar({ className }: { className?: string }) {
   const pathname = usePathname();
 
   return (
-    <aside className={cn("fixed left-0 top-16 bottom-0 w-64 border-r border-border bg-white overflow-y-auto", className)}>
+    <aside className={cn("fixed left-0 top-16 bottom-0 w-64 border-r border-border bg-surface-light overflow-y-auto", className)}>
       <div className="p-4">
-        <div className="mb-4 rounded-xl bg-primary-50 px-3 py-2">
-          <p className="text-xs font-bold text-primary-700 uppercase tracking-wider">Admin Panel</p>
+        <div className="mb-4 rounded-xl bg-primary-500/15 px-3 py-2">
+          <p className="text-xs font-bold text-primary-400 uppercase tracking-wider">Admin Panel</p>
         </div>
         <nav className="flex flex-col gap-1">
           {navItems.map((item) => {
@@ -31,8 +31,8 @@ export default function AdminSidebar({ className }: { className?: string }) {
                 className={cn(
                   "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
                   isActive
-                    ? "bg-primary-500 text-white shadow-sm"
-                    : "text-text-muted hover:bg-surface hover:text-text-primary"
+                    ? "bg-primary-500 text-secondary-700 shadow-sm font-bold"
+                    : "text-text-muted hover:bg-surface-white hover:text-text-primary"
                 )}
               >
                 <item.icon className="h-5 w-5" />
@@ -46,7 +46,7 @@ export default function AdminSidebar({ className }: { className?: string }) {
       <div className="absolute bottom-0 left-0 right-0 p-4">
         <Link
           href="/dashboard"
-          className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-text-muted hover:bg-surface hover:text-text-primary"
+          className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-text-muted hover:bg-surface-white hover:text-text-primary"
         >
           <ArrowLeft className="h-4 w-4" /> Back to App
         </Link>

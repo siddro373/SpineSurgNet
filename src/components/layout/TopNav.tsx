@@ -43,7 +43,7 @@ export default function TopNav({ user }: TopNavProps) {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 flex h-16 items-center bg-white/95 backdrop-blur-sm px-4 lg:px-6 shadow-sm">
+    <header className="fixed top-0 left-0 right-0 z-40 flex h-16 items-center bg-surface/95 backdrop-blur-sm px-4 lg:px-6 border-b border-border">
       {/* Left: Logo */}
       <div className="flex items-center gap-3">
         <Link href="/dashboard" className="flex items-center gap-2.5">
@@ -65,7 +65,7 @@ export default function TopNav({ user }: TopNavProps) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search surgeons..."
-            className="h-10 w-full rounded-full border border-border bg-white pl-10 pr-4 text-sm text-text-primary placeholder:text-text-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 transition-colors hover:border-border-dark"
+            className="h-10 w-full rounded-full border border-border bg-surface-white pl-10 pr-4 text-sm text-text-primary placeholder:text-text-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 transition-colors hover:border-border-dark"
           />
         </form>
       </div>
@@ -95,7 +95,7 @@ export default function TopNav({ user }: TopNavProps) {
           </button>
 
           {dropdownOpen && (
-            <div className="absolute right-0 mt-2 w-60 rounded-2xl border border-border bg-white py-2 shadow-xl">
+            <div className="absolute right-0 mt-2 w-60 rounded-2xl border border-border bg-surface-light py-2 shadow-xl">
               <div className="border-b border-border px-4 py-3">
                 <p className="text-sm font-semibold text-text-primary">{user?.name}</p>
                 <p className="text-xs text-text-muted">{user?.email}</p>
@@ -128,7 +128,7 @@ export default function TopNav({ user }: TopNavProps) {
 
       {/* Mobile search bar */}
       {searchOpen && (
-        <div className="absolute top-16 left-0 right-0 bg-white/95 backdrop-blur-sm p-4 shadow-sm md:hidden">
+        <div className="absolute top-16 left-0 right-0 bg-surface/95 backdrop-blur-sm p-4 border-b border-border md:hidden">
           <form onSubmit={handleSearch} className="relative">
             <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
             <input
@@ -137,7 +137,7 @@ export default function TopNav({ user }: TopNavProps) {
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search surgeons..."
               autoFocus
-              className="h-11 w-full rounded-full border border-border bg-white pl-10 pr-4 text-sm transition-colors hover:border-border-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400"
+              className="h-11 w-full rounded-full border border-border bg-surface-white pl-10 pr-4 text-sm text-text-primary transition-colors hover:border-border-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400"
             />
           </form>
         </div>

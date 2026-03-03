@@ -47,15 +47,15 @@ export default function DashboardPage() {
   return (
     <div>
       {/* Welcome banner */}
-      <div className="mb-6 rounded-2xl bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 p-6 text-white shadow-lg overflow-hidden relative">
-        <div className="absolute inset-0 opacity-10" style={{
+      <div className="mb-6 rounded-2xl bg-gradient-to-br from-primary-500/20 via-surface-light to-secondary-500 p-6 text-white shadow-lg overflow-hidden relative border border-primary-500/20">
+        <div className="absolute inset-0 opacity-5" style={{
           backgroundImage: "radial-gradient(circle at 20% 50%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px)",
           backgroundSize: "30px 30px"
         }} />
         <div className="relative">
-          <p className="text-primary-100 text-sm font-medium">Welcome back</p>
+          <p className="text-primary-400 text-sm font-medium">Welcome back</p>
           <h1 className="text-3xl font-bold mt-1">Dr. {userName.split(" ").pop()}</h1>
-          <p className="mt-2 text-primary-100 text-sm max-w-sm">
+          <p className="mt-2 text-text-muted text-sm max-w-sm">
             Stay connected with the spine surgery community.
           </p>
         </div>
@@ -65,8 +65,8 @@ export default function DashboardPage() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6">
         <Card>
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100 shrink-0">
-              <Users className="h-6 w-6 text-primary-600" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-500/15 shrink-0">
+              <Users className="h-6 w-6 text-primary-400" />
             </div>
             <div>
               <p className="text-3xl font-bold text-text-primary">{stats.total}</p>
@@ -76,8 +76,8 @@ export default function DashboardPage() {
         </Card>
         <Card>
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary-100 shrink-0">
-              <Stethoscope className="h-6 w-6 text-secondary-600" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary-200/15 shrink-0">
+              <Stethoscope className="h-6 w-6 text-secondary-200" />
             </div>
             <div>
               <p className="text-3xl font-bold text-text-primary">{stats.inSpecialty}</p>
@@ -87,8 +87,8 @@ export default function DashboardPage() {
         </Card>
         <Card>
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-green-100 shrink-0">
-              <MapPin className="h-6 w-6 text-green-600" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-success/15 shrink-0">
+              <MapPin className="h-6 w-6 text-success" />
             </div>
             <div>
               <p className="text-3xl font-bold text-text-primary">{stats.inState}</p>
@@ -98,8 +98,8 @@ export default function DashboardPage() {
         </Card>
         <Card>
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-100 shrink-0">
-              <BookOpen className="h-6 w-6 text-purple-600" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-500/15 shrink-0">
+              <BookOpen className="h-6 w-6 text-purple-400" />
             </div>
             <div>
               <p className="text-3xl font-bold text-text-primary">{stats.totalConferences}</p>

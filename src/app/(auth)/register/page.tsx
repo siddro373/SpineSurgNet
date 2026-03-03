@@ -174,7 +174,7 @@ export default function RegisterPage() {
             <span
               key={step}
               className={`text-xs font-medium ${
-                i < currentStep ? "text-primary-600" : i === currentStep ? "text-primary-500" : "text-text-light"
+                i < currentStep ? "text-primary-400" : i === currentStep ? "text-primary-500" : "text-text-light"
               }`}
             >
               {step}
@@ -371,7 +371,7 @@ export default function RegisterPage() {
                           value={selected?.role || "Attendee"}
                           onChange={(e) => updateConferenceRole(conf.id, e.target.value)}
                           onClick={(e) => e.stopPropagation()}
-                          className="mt-2 h-8 rounded border border-border bg-white px-2 text-xs text-text-secondary"
+                          className="mt-2 h-8 rounded border border-border bg-surface-white px-2 text-xs text-text-secondary"
                         >
                           {CONFERENCE_ROLES.map((role) => (
                             <option key={role} value={role}>{role}</option>

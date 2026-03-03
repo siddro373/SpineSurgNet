@@ -18,7 +18,7 @@ export default function ExportPage() {
 
       <Card>
         <div className="flex items-start gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-50 shrink-0">
+          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-success/15 shrink-0">
             <FileSpreadsheet className="h-6 w-6 text-success" />
           </div>
           <div className="flex-1">
@@ -39,7 +39,7 @@ export default function ExportPage() {
         </div>
       </Card>
 
-      <Card className="mt-6 border-primary-200 bg-primary-50">
+      <Card className="mt-6 border-primary-500/30 bg-primary-500/10">
         <h3 className="font-semibold text-text-primary mb-2">For Ulrich Medical USA</h3>
         <p className="text-sm text-text-muted">
           This export contains all surgeon data gathered through SpineSurgNet registration.

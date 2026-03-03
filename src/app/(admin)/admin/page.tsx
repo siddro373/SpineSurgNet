@@ -31,8 +31,8 @@ export default function AdminDashboard() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
         <Card>
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary-100">
-              <Users className="h-5 w-5 text-primary-500" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary-500/15">
+              <Users className="h-5 w-5 text-primary-400" />
             </div>
             <div>
               <p className="text-2xl font-bold text-text-primary">{stats?.totalSurgeons || 0}</p>
@@ -42,7 +42,7 @@ export default function AdminDashboard() {
         </Card>
         <Card>
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-green-100">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-success/15">
               <TrendingUp className="h-5 w-5 text-success" />
             </div>
             <div>
@@ -53,8 +53,8 @@ export default function AdminDashboard() {
         </Card>
         <Card>
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-purple-100">
-              <Calendar className="h-5 w-5 text-purple-500" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-purple-500/15">
+              <Calendar className="h-5 w-5 text-purple-400" />
             </div>
             <div>
               <p className="text-2xl font-bold text-text-primary">{stats?.newThisMonth || 0}</p>
@@ -64,8 +64,8 @@ export default function AdminDashboard() {
         </Card>
         <Card>
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-100">
-              <BarChart3 className="h-5 w-5 text-amber-500" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-warning/15">
+              <BarChart3 className="h-5 w-5 text-warning" />
             </div>
             <div>
               <p className="text-2xl font-bold text-text-primary">{stats?.bySpecialty?.length || 0}</p>

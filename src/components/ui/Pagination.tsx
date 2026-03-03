@@ -44,7 +44,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
             className={cn(
               "inline-flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium",
               currentPage === page
-                ? "bg-primary-500 text-white"
+                ? "bg-primary-500 text-secondary-700 font-bold"
                 : "text-text-secondary hover:bg-surface"
             )}
           >

@@ -23,9 +23,9 @@ interface SurgeonCardProps {
 export default function SurgeonCard({ surgeon }: SurgeonCardProps) {
   return (
     <Link href={`/surgeon/${surgeon.id}`}>
-      <div className="group bg-white rounded-2xl border border-border shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer">
+      <div className="group bg-surface-light rounded-2xl border border-border shadow-sm hover:shadow-lg hover:border-border-dark transition-all duration-300 overflow-hidden cursor-pointer">
         {/* Photo header */}
-        <div className="relative h-32 bg-gradient-to-br from-primary-100 via-primary-200 to-secondary-100 flex items-center justify-center">
+        <div className="relative h-32 bg-gradient-to-br from-primary-500/20 via-primary-600/15 to-secondary-400/20 flex items-center justify-center">
           {surgeon.profileImageUrl ? (
             <img
               src={surgeon.profileImageUrl}
@@ -33,8 +33,8 @@ export default function SurgeonCard({ surgeon }: SurgeonCardProps) {
               className="w-full h-full object-cover"
             />
           ) : (
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/80 shadow-sm">
-              <span className="text-2xl font-bold text-primary-600">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-surface-white/80 shadow-sm">
+              <span className="text-2xl font-bold text-primary-400">
                 {surgeon.firstName[0]}{surgeon.lastName[0]}
               </span>
             </div>
@@ -58,7 +58,7 @@ export default function SurgeonCard({ surgeon }: SurgeonCardProps) {
           <h3 className="font-bold text-text-primary text-base leading-tight">
             Dr. {surgeon.firstName} {surgeon.lastName}
           </h3>
-          <p className="text-sm text-primary-600 font-medium mt-0.5">{surgeon.specialty}</p>
+          <p className="text-sm text-primary-400 font-medium mt-0.5">{surgeon.specialty}</p>
           <div className="flex items-center gap-1 mt-1.5 text-xs text-text-muted">
             <MapPin className="h-3 w-3 shrink-0" />
             {surgeon.city}, {surgeon.state}

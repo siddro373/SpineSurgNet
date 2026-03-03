@@ -212,7 +212,7 @@ export default function EditProfilePage() {
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={uploadingAvatar}
-              className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-primary-500 text-white shadow-md hover:bg-primary-600 transition-colors disabled:opacity-50"
+              className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-primary-500 text-secondary-700 shadow-md hover:bg-primary-600 transition-colors disabled:opacity-50"
             >
               {uploadingAvatar ? (
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
@@ -300,7 +300,7 @@ export default function EditProfilePage() {
                             value={selected?.role || "Attendee"}
                             onChange={(e) => updateConferenceRole(conf.id, e.target.value)}
                             onClick={(e) => e.stopPropagation()}
-                            className="mt-2 h-8 rounded border border-border bg-white px-2 text-xs"
+                            className="mt-2 h-8 rounded border border-border bg-surface-white px-2 text-xs text-text-secondary"
                           >
                             {CONFERENCE_ROLES.map((role) => (
                               <option key={role} value={role}>{role}</option>

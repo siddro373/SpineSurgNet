@@ -27,7 +27,7 @@ export default function Modal({ isOpen, onClose, title, children, className }: M
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="fixed inset-0 bg-black/50" onClick={onClose} />
-      <div className={cn("relative z-10 w-full max-w-lg rounded-2xl border border-border bg-white p-6 shadow-xl", className)}>
+      <div className={cn("relative z-10 w-full max-w-lg rounded-2xl border border-border bg-surface-light p-6 shadow-xl", className)}>
         <div className="flex items-center justify-between mb-4">
           {title && <h2 className="text-lg font-semibold text-text-primary">{title}</h2>}
           <button onClick={onClose} className="ml-auto text-text-muted hover:text-text-primary">

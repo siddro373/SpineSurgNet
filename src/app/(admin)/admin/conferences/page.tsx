@@ -184,7 +184,7 @@ export default function ConferenceManagementPage() {
                   <td className="px-4 py-3 text-text-secondary">{c.fullName}</td>
                   <td className="px-4 py-3 text-text-muted text-xs">{c.description || "—"}</td>
                   <td className="px-4 py-3 text-center">
-                    <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-primary-50 text-xs font-medium text-primary-600">
+                    <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-primary-500/15 text-xs font-medium text-primary-400">
                       {c._count.surgeons}
                     </span>
                   </td>

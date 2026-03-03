@@ -1,9 +1,9 @@
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center relative overflow-hidden p-4" style={{ background: "linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 30%, #CCFBF1 100%)" }}>
+    <div className="flex min-h-screen flex-col items-center justify-center relative overflow-hidden p-4 bg-surface">
       {/* Decorative background circles */}
-      <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-primary-200/30 blur-3xl" />
-      <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-secondary-200/30 blur-3xl" />
+      <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-primary-500/10 blur-3xl" />
+      <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-secondary-400/10 blur-3xl" />
 
       <div className="relative w-full max-w-md">
         {/* Logo */}

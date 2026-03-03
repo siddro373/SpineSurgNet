@@ -48,9 +48,9 @@ export default function SurgeonProfilePage({ params }: { params: Promise<{ id: s
   return (
     <div className="space-y-6">
       {/* Profile header with cover banner */}
-      <div className="rounded-2xl overflow-hidden border border-border bg-white shadow-sm">
+      <div className="rounded-2xl overflow-hidden border border-border bg-surface-light shadow-sm">
         {/* Cover banner */}
-        <div className="h-32 bg-gradient-to-br from-primary-400 via-primary-500 to-secondary-400" />
+        <div className="h-32 bg-gradient-to-br from-primary-500/30 via-primary-600/20 to-secondary-400/30" />
 
         {/* Profile content */}
         <div className="px-6 pb-6">
@@ -59,7 +59,7 @@ export default function SurgeonProfilePage({ params }: { params: Promise<{ id: s
               name={`${surgeon.firstName} ${surgeon.lastName}`}
               src={surgeon.profileImageUrl}
               size="xl"
-              className="ring-4 ring-white shadow-md"
+              className="ring-4 ring-surface-light shadow-md"
             />
             {isOwnProfile && (
               <Link href="/profile/edit">
@@ -73,7 +73,7 @@ export default function SurgeonProfilePage({ params }: { params: Promise<{ id: s
           <h1 className="text-2xl font-bold text-text-primary">
             Dr. {surgeon.firstName} {surgeon.lastName}
           </h1>
-          <p className="text-primary-600 font-semibold mt-0.5">{surgeon.specialty}</p>
+          <p className="text-primary-400 font-semibold mt-0.5">{surgeon.specialty}</p>
           {surgeon.subSpecialty && (
             <p className="text-sm text-text-muted">{surgeon.subSpecialty}</p>
           )}

@@ -13,8 +13,8 @@ export default function Card({ children, className, padding = "default", variant
       className={cn(
         "rounded-2xl border shadow-sm transition-shadow",
         {
-          "border-border bg-white": variant === "default",
-          "border-primary-100 bg-surface-warm": variant === "warm",
+          "border-border bg-surface-light": variant === "default",
+          "border-primary-900 bg-surface-warm": variant === "warm",
         },
         {
           "p-6": padding === "default",

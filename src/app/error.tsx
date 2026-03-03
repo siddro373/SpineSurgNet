@@ -17,7 +17,7 @@ export default function Error({
         <div className="mt-6 flex gap-3 justify-center">
           <button
             onClick={reset}
-            className="inline-flex items-center rounded-lg bg-primary-500 px-4 py-2 text-sm font-medium text-white hover:bg-primary-600 transition-colors"
+            className="inline-flex items-center rounded-full bg-primary-500 px-4 py-2 text-sm font-bold text-secondary-700 hover:bg-primary-600 transition-colors shadow-md shadow-primary-500/25"
           >
             Try Again
           </button>
