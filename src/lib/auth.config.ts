@@ -20,10 +20,13 @@ export const authConfig: NextAuthConfig = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session: sessionUpdate }) {
       if (user) {
         token.role = user.role;
         token.surgeonId = user.surgeonId;
+      }
+      if (trigger === "update" && sessionUpdate?.email) {
+        token.email = sessionUpdate.email;
       }
       return token;
     },

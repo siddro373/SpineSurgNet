@@ -62,7 +62,7 @@ export default function SurgeonProfilePage({ params }: { params: Promise<{ id: s
               className="ring-4 ring-surface-light shadow-md"
             />
             {isOwnProfile && (
-              <Link href="/profile/edit">
+              <Link href="/profile">
                 <Button variant="secondary" size="sm">
                   <Pencil className="h-4 w-4 mr-1" /> Edit Profile
                 </Button>

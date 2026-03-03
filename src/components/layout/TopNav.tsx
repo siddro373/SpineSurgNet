@@ -101,10 +101,10 @@ export default function TopNav({ user }: TopNavProps) {
                 <p className="text-xs text-text-muted">{user?.email}</p>
               </div>
               <Link href="/profile" className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-text-secondary hover:bg-surface rounded-lg mx-1" onClick={() => setDropdownOpen(false)}>
-                <User className="h-4 w-4" /> My Profile
+                <User className="h-4 w-4" /> My Account
               </Link>
-              <Link href="/settings" className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-text-secondary hover:bg-surface rounded-lg mx-1" onClick={() => setDropdownOpen(false)}>
-                <Settings className="h-4 w-4" /> Settings
+              <Link href="/profile?tab=security" className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-text-secondary hover:bg-surface rounded-lg mx-1" onClick={() => setDropdownOpen(false)}>
+                <Settings className="h-4 w-4" /> Security
               </Link>
               {user?.role === "admin" && (
                 <Link href="/admin" className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-text-secondary hover:bg-surface rounded-lg mx-1" onClick={() => setDropdownOpen(false)}>

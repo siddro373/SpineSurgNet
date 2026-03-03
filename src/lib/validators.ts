@@ -47,6 +47,16 @@ export const updateSurgeonSchema = z.object({
   })).optional(),
 });
 
+export const changeEmailSchema = z.object({
+  newEmail: z.email("Invalid email address"),
+  password: z.string().min(1, "Password is required"),
+});
+
+export const deleteAccountSchema = z.object({
+  password: z.string().min(1, "Password is required"),
+  confirmText: z.literal("DELETE"),
+});
+
 export type LoginInput = z.infer<typeof loginSchema>;
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type UpdateSurgeonInput = z.infer<typeof updateSurgeonSchema>;

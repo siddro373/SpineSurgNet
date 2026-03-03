@@ -2,14 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, UserCircle, Settings } from "lucide-react";
+import { LayoutDashboard, Users, UserCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/dashboard", label: "Home", icon: LayoutDashboard },
   { href: "/directory", label: "Directory", icon: Users },
-  { href: "/profile", label: "Profile", icon: UserCircle },
-  { href: "/settings", label: "Settings", icon: Settings },
+  { href: "/profile", label: "Account", icon: UserCircle },
 ];
 
 export default function BottomTabBar() {

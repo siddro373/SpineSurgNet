@@ -2,14 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, UserCircle, Settings } from "lucide-react";
+import { LayoutDashboard, Users, UserCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/directory", label: "Surgeon Directory", icon: Users },
-  { href: "/profile", label: "My Profile", icon: UserCircle },
-  { href: "/settings", label: "Settings", icon: Settings },
+  { href: "/profile", label: "My Account", icon: UserCircle },
 ];
 
 interface SidebarProps {
