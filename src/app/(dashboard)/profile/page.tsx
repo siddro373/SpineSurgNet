@@ -27,7 +27,7 @@ interface SelectedConference {
 }
 
 function ProfileContent() {
-  const { data: session, update: updateSession } = useSession();
+  const { data: session, status, update: updateSession } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -90,12 +90,15 @@ function ProfileContent() {
 
   const surgeonId = session?.user?.surgeonId;
 
-  // Fetch profile data
+  // Fetch profile data — wait until session is done loading
   useEffect(() => {
+    if (status === "loading") return;
+
     if (!surgeonId) {
-      if (session) setLoading(false);
+      setLoading(false);
       return;
     }
+
     Promise.all([
       fetch(`/api/surgeons/${surgeonId}`).then((r) => r.json()),
       fetch("/api/conferences").then((r) => r.json()),
@@ -130,7 +133,7 @@ function ProfileContent() {
       })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [surgeonId, session]);
+  }, [surgeonId, status]);
 
   const handleTabChange = useCallback((tab: string) => {
     setActiveTab(tab);
