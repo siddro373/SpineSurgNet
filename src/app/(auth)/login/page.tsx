@@ -7,9 +7,11 @@ import Link from "next/link";
 import Card from "@/components/ui/Card";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -28,13 +30,13 @@ export default function LoginPage() {
       });
 
       if (result?.error) {
-        setError("Invalid email or password");
+        setError(t.login.invalidCredentials);
       } else {
         router.push("/dashboard");
         router.refresh();
       }
     } catch {
-      setError("Something went wrong. Please try again.");
+      setError(t.login.somethingWrong);
     } finally {
       setLoading(false);
     }
@@ -43,9 +45,9 @@ export default function LoginPage() {
   return (
     <Card>
       <h2 className="mb-1 text-2xl font-bold text-text-primary text-center">
-        Welcome back
+        {t.login.welcomeBack}
       </h2>
-      <p className="mb-6 text-sm text-text-muted text-center">Sign in to your account</p>
+      <p className="mb-6 text-sm text-text-muted text-center">{t.login.signInSubtitle}</p>
 
       {error && (
         <div className="mb-4 rounded-md bg-error-light p-3 text-sm text-error">
@@ -55,30 +57,30 @@ export default function LoginPage() {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
-          label="Email Address"
+          label={t.login.emailAddress}
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@hospital.com"
+          placeholder={t.login.emailPlaceholder}
           required
         />
         <Input
-          label="Password"
+          label={t.login.password}
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter your password"
+          placeholder={t.login.passwordPlaceholder}
           required
         />
         <Button type="submit" isLoading={loading} className="w-full">
-          Sign In
+          {t.login.signIn}
         </Button>
       </form>
 
       <p className="mt-6 text-center text-sm text-text-muted">
-        Don&apos;t have an account?{" "}
+        {t.login.noAccount}{" "}
         <Link href="/register" className="font-medium text-primary-500 hover:text-primary-600">
-          Register here
+          {t.login.registerHere}
         </Link>
       </p>
     </Card>

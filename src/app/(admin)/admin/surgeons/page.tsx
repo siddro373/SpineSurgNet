@@ -10,8 +10,10 @@ import Spinner from "@/components/ui/Spinner";
 import Pagination from "@/components/ui/Pagination";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Database, Download, ExternalLink } from "lucide-react";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function AdminSurgeonsPage() {
+  const { t } = useLanguage();
   const [search, setSearch] = useState("");
   const [surgeons, setSurgeons] = useState<any[]>([]);
   const [page, setPage] = useState(1);
@@ -46,13 +48,13 @@ export default function AdminSurgeonsPage() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-3xl font-bold text-text-primary">
-            All Surgeons
+            {t.admin.allSurgeons}
           </h1>
-          <p className="text-sm text-text-muted mt-1">{total} registered surgeons</p>
+          <p className="text-sm text-text-muted mt-1">{total} {t.admin.registeredSurgeons}</p>
         </div>
         <a href="/api/admin/export" download>
           <Button variant="secondary" size="sm">
-            <Download className="h-4 w-4 mr-2" /> Export CSV
+            <Download className="h-4 w-4 mr-2" /> {t.admin.exportCSV}
           </Button>
         </a>
       </div>
@@ -62,7 +64,7 @@ export default function AdminSurgeonsPage() {
           <SearchInput
             value={search}
             onChange={setSearch}
-            placeholder="Search by name or NPI..."
+            placeholder={t.admin.searchPlaceholder}
             className="max-w-sm"
           />
         </div>
@@ -74,12 +76,12 @@ export default function AdminSurgeonsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border bg-surface-light">
-                  <th className="px-4 py-3 text-left font-medium text-text-muted">Name</th>
-                  <th className="px-4 py-3 text-left font-medium text-text-muted">NPI</th>
-                  <th className="px-4 py-3 text-left font-medium text-text-muted">Specialty</th>
-                  <th className="px-4 py-3 text-left font-medium text-text-muted">Location</th>
-                  <th className="px-4 py-3 text-left font-medium text-text-muted">Conferences</th>
-                  <th className="px-4 py-3 text-left font-medium text-text-muted">Actions</th>
+                  <th className="px-4 py-3 text-left font-medium text-text-muted">{t.admin.name}</th>
+                  <th className="px-4 py-3 text-left font-medium text-text-muted">{t.admin.npi}</th>
+                  <th className="px-4 py-3 text-left font-medium text-text-muted">{t.admin.specialty}</th>
+                  <th className="px-4 py-3 text-left font-medium text-text-muted">{t.admin.location}</th>
+                  <th className="px-4 py-3 text-left font-medium text-text-muted">{t.admin.conferences}</th>
+                  <th className="px-4 py-3 text-left font-medium text-text-muted">{t.admin.actions}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">

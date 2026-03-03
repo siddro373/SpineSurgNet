@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import Badge from "@/components/ui/Badge";
 import { MapPin } from "lucide-react";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 interface SurgeonCardProps {
   surgeon: {
@@ -21,6 +24,8 @@ interface SurgeonCardProps {
 }
 
 export default function SurgeonCard({ surgeon }: SurgeonCardProps) {
+  const { t } = useLanguage();
+
   return (
     <Link href={`/surgeon/${surgeon.id}`}>
       <div className="group bg-surface-light rounded-2xl border border-border shadow-sm hover:shadow-lg hover:border-border-dark transition-all duration-300 overflow-hidden cursor-pointer">
@@ -43,12 +48,12 @@ export default function SurgeonCard({ surgeon }: SurgeonCardProps) {
           <div className="absolute bottom-2 left-2 flex gap-1">
             {surgeon.boardCertified && (
               <span className="rounded-full bg-green-500 px-2 py-0.5 text-[10px] font-semibold text-white shadow-sm">
-                Board Certified
+                {t.surgeon.boardCertified}
               </span>
             )}
             {surgeon.fellowshipTrained && (
               <span className="rounded-full bg-secondary-500 px-2 py-0.5 text-[10px] font-semibold text-white shadow-sm">
-                Fellowship
+                {t.surgeon.fellowship}
               </span>
             )}
           </div>

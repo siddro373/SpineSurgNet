@@ -4,12 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Users, UserCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const navItems = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/directory", label: "Surgeon Directory", icon: Users },
-  { href: "/profile", label: "My Account", icon: UserCircle },
-];
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 interface SidebarProps {
   className?: string;
@@ -17,6 +12,13 @@ interface SidebarProps {
 
 export default function Sidebar({ className }: SidebarProps) {
   const pathname = usePathname();
+  const { t } = useLanguage();
+
+  const navItems = [
+    { href: "/dashboard", label: t.nav.dashboard, icon: LayoutDashboard },
+    { href: "/directory", label: t.nav.directory, icon: Users },
+    { href: "/profile", label: t.nav.account, icon: UserCircle },
+  ];
 
   return (
     <aside className={cn("fixed left-0 top-16 bottom-0 w-64 border-r border-border bg-surface-light overflow-y-auto", className)}>
@@ -42,8 +44,8 @@ export default function Sidebar({ className }: SidebarProps) {
       </nav>
 
       <div className="absolute bottom-0 left-0 right-0 border-t border-border p-4">
-        <p className="text-xs text-text-light text-center">Powered by</p>
-        <p className="text-xs font-semibold text-primary-400 text-center">Ulrich Medical USA</p>
+        <p className="text-xs text-text-light text-center">{t.nav.poweredBy}</p>
+        <p className="text-xs font-semibold text-primary-400 text-center">{t.nav.ulrichMedical}</p>
       </div>
     </aside>
   );

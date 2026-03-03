@@ -12,6 +12,7 @@ import Spinner from "@/components/ui/Spinner";
 import Avatar from "@/components/ui/Avatar";
 import { SPECIALTIES, SUB_SPECIALTIES, US_STATES, CONFERENCE_ROLES } from "@/lib/constants";
 import { Camera, UserCircle, Shield, AlertTriangle, Eye } from "lucide-react";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 interface ConferenceOption {
   id: string;
@@ -25,17 +26,18 @@ interface SelectedConference {
   role: string;
 }
 
-const tabs = [
-  { key: "profile", label: "Profile Info", icon: UserCircle },
-  { key: "security", label: "Security", icon: Shield },
-  { key: "danger", label: "Danger Zone", icon: AlertTriangle },
-];
-
 function ProfileContent() {
   const { data: session, update: updateSession } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { t } = useLanguage();
+
+  const tabs = [
+    { key: "profile", label: t.profile.profileInfo, icon: UserCircle },
+    { key: "security", label: t.profile.security, icon: Shield },
+    { key: "danger", label: t.profile.dangerZone, icon: AlertTriangle },
+  ];
 
   const initialTab = searchParams.get("tab") || "profile";
   const [activeTab, setActiveTab] = useState(initialTab);
@@ -163,10 +165,10 @@ function ProfileContent() {
       fd.append("avatar", file);
       const res = await fetch("/api/user/upload-avatar", { method: "POST", body: fd });
       const data = await res.json();
-      if (!res.ok) { setProfileError(data.error || "Failed to upload image"); return; }
+      if (!res.ok) { setProfileError(data.error || t.profile.failedUpload); return; }
       setProfileImageUrl(data.profileImageUrl);
     } catch {
-      setProfileError("Failed to upload image");
+      setProfileError(t.profile.failedUpload);
     } finally {
       setUploadingAvatar(false);
     }
@@ -195,13 +197,13 @@ function ProfileContent() {
       });
       if (!res.ok) {
         const data = await res.json();
-        setProfileError(data.error || "Failed to update profile");
+        setProfileError(data.error || t.profile.failedUpdate);
         return;
       }
       setProfileSuccess(true);
       setTimeout(() => setProfileSuccess(false), 3000);
     } catch {
-      setProfileError("Something went wrong");
+      setProfileError(t.profile.somethingWrong);
     } finally {
       setSaving(false);
     }
@@ -219,13 +221,13 @@ function ProfileContent() {
         body: JSON.stringify({ newEmail, password: emailPassword }),
       });
       const data = await res.json();
-      if (!res.ok) { setEmailError(data.error || "Failed to update email"); return; }
-      setEmailSuccess("Email updated successfully");
+      if (!res.ok) { setEmailError(data.error || t.profile.failedEmail); return; }
+      setEmailSuccess(t.profile.emailUpdated);
       await updateSession({ email: newEmail });
       setNewEmail("");
       setEmailPassword("");
     } catch {
-      setEmailError("Something went wrong");
+      setEmailError(t.profile.somethingWrong);
     } finally {
       setEmailLoading(false);
     }
@@ -235,8 +237,8 @@ function ProfileContent() {
     e.preventDefault();
     setPasswordError("");
     setPasswordSuccess("");
-    if (newPassword !== confirmPassword) { setPasswordError("New passwords do not match"); return; }
-    if (newPassword.length < 6) { setPasswordError("New password must be at least 6 characters"); return; }
+    if (newPassword !== confirmPassword) { setPasswordError(t.profile.passwordsNoMatch); return; }
+    if (newPassword.length < 6) { setPasswordError(t.profile.passwordTooShort); return; }
     setPasswordLoading(true);
     try {
       const res = await fetch("/api/user/change-password", {
@@ -245,13 +247,13 @@ function ProfileContent() {
         body: JSON.stringify({ currentPassword, newPassword }),
       });
       const data = await res.json();
-      if (!res.ok) { setPasswordError(data.error || "Failed to update password"); return; }
-      setPasswordSuccess("Password updated successfully");
+      if (!res.ok) { setPasswordError(data.error || t.profile.failedPassword); return; }
+      setPasswordSuccess(t.profile.passwordUpdated);
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
     } catch {
-      setPasswordError("Something went wrong");
+      setPasswordError(t.profile.somethingWrong);
     } finally {
       setPasswordLoading(false);
     }
@@ -260,7 +262,7 @@ function ProfileContent() {
   const handleDeleteAccount = async (e: React.FormEvent) => {
     e.preventDefault();
     setDeleteError("");
-    if (deleteConfirm !== "DELETE") { setDeleteError("Please type DELETE to confirm"); return; }
+    if (deleteConfirm !== "DELETE") { setDeleteError(t.profile.pleaseTypeDelete); return; }
     setDeleteLoading(true);
     try {
       const res = await fetch("/api/user/delete-account", {
@@ -269,10 +271,10 @@ function ProfileContent() {
         body: JSON.stringify({ password: deletePassword, confirmText: deleteConfirm }),
       });
       const data = await res.json();
-      if (!res.ok) { setDeleteError(data.error || "Failed to delete account"); return; }
+      if (!res.ok) { setDeleteError(data.error || t.profile.failedDelete); return; }
       signOut({ callbackUrl: "/login" });
     } catch {
-      setDeleteError("Something went wrong");
+      setDeleteError(t.profile.somethingWrong);
     } finally {
       setDeleteLoading(false);
     }
@@ -285,7 +287,7 @@ function ProfileContent() {
   if (!surgeonId) {
     return (
       <div className="text-center py-12">
-        <p className="text-text-muted">No surgeon profile found. Please complete registration.</p>
+        <p className="text-text-muted">{t.profile.noProfile}</p>
       </div>
     );
   }
@@ -293,10 +295,10 @@ function ProfileContent() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-text-primary">My Account</h1>
+        <h1 className="text-3xl font-bold text-text-primary">{t.profile.title}</h1>
         <Link href={`/surgeon/${surgeonId}`}>
           <Button variant="secondary" size="sm">
-            <Eye className="h-4 w-4 mr-1" /> View Public Profile
+            <Eye className="h-4 w-4 mr-1" /> {t.profile.viewPublicProfile}
           </Button>
         </Link>
       </div>
@@ -369,64 +371,64 @@ function ProfileContent() {
           )}
           {profileSuccess && (
             <div className="mb-4 rounded-md bg-success-light p-3 text-sm text-success">
-              Profile updated successfully!
+              {t.profile.profileUpdated}
             </div>
           )}
 
           <form onSubmit={handleProfileSave}>
             <Card className="mb-6">
-              <h2 className="text-lg font-bold text-text-primary mb-4">Personal Information</h2>
+              <h2 className="text-lg font-bold text-text-primary mb-4">{t.profile.personalInfo}</h2>
               <div className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <Input label="First Name" value={formData.firstName} onChange={(e) => updateField("firstName", e.target.value)} required />
-                  <Input label="Last Name" value={formData.lastName} onChange={(e) => updateField("lastName", e.target.value)} required />
+                  <Input label={t.profile.firstName} value={formData.firstName} onChange={(e) => updateField("firstName", e.target.value)} required />
+                  <Input label={t.profile.lastName} value={formData.lastName} onChange={(e) => updateField("lastName", e.target.value)} required />
                 </div>
               </div>
             </Card>
 
             <Card className="mb-6">
-              <h2 className="text-lg font-bold text-text-primary mb-4">Professional Details</h2>
+              <h2 className="text-lg font-bold text-text-primary mb-4">{t.profile.professionalDetails}</h2>
               <div className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <Select label="Specialty" value={formData.specialty} onChange={(e) => updateField("specialty", e.target.value)} options={SPECIALTIES.map((s) => ({ value: s, label: s }))} placeholder="Select specialty" />
-                  <Select label="Sub-specialty" value={formData.subSpecialty} onChange={(e) => updateField("subSpecialty", e.target.value)} options={SUB_SPECIALTIES.map((s) => ({ value: s, label: s }))} placeholder="Select sub-specialty" />
+                  <Select label={t.profile.specialty} value={formData.specialty} onChange={(e) => updateField("specialty", e.target.value)} options={SPECIALTIES.map((s) => ({ value: s, label: s }))} placeholder="Select specialty" />
+                  <Select label={t.profile.subSpecialty} value={formData.subSpecialty} onChange={(e) => updateField("subSpecialty", e.target.value)} options={SUB_SPECIALTIES.map((s) => ({ value: s, label: s }))} placeholder="Select sub-specialty" />
                 </div>
 
                 <div className="flex gap-6">
                   <label className="flex items-center gap-2 text-sm text-text-secondary cursor-pointer">
                     <input type="checkbox" checked={formData.boardCertified} onChange={(e) => updateField("boardCertified", e.target.checked)} className="h-4 w-4 rounded border-border text-primary-500" />
-                    Board Certified
+                    {t.profile.boardCertified}
                   </label>
                   <label className="flex items-center gap-2 text-sm text-text-secondary cursor-pointer">
                     <input type="checkbox" checked={formData.fellowshipTrained} onChange={(e) => updateField("fellowshipTrained", e.target.checked)} className="h-4 w-4 rounded border-border text-primary-500" />
-                    Fellowship Trained
+                    {t.profile.fellowshipTrained}
                   </label>
                 </div>
 
-                <Input label="Years in Practice" type="number" value={formData.yearsInPractice} onChange={(e) => updateField("yearsInPractice", e.target.value)} placeholder="e.g., 15" />
+                <Input label={t.profile.yearsInPractice} type="number" value={formData.yearsInPractice} onChange={(e) => updateField("yearsInPractice", e.target.value)} placeholder="e.g., 15" />
 
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <Input label="Practice Name" value={formData.practiceName} onChange={(e) => updateField("practiceName", e.target.value)} />
-                  <Input label="Hospital Affiliation" value={formData.hospitalAffiliation} onChange={(e) => updateField("hospitalAffiliation", e.target.value)} />
+                  <Input label={t.profile.practiceName} value={formData.practiceName} onChange={(e) => updateField("practiceName", e.target.value)} />
+                  <Input label={t.profile.hospitalAffiliation} value={formData.hospitalAffiliation} onChange={(e) => updateField("hospitalAffiliation", e.target.value)} />
                 </div>
               </div>
             </Card>
 
             <Card className="mb-6">
-              <h2 className="text-lg font-bold text-text-primary mb-4">Practice Location</h2>
+              <h2 className="text-lg font-bold text-text-primary mb-4">{t.profile.practiceLocation}</h2>
               <div className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-3">
-                  <Input label="City" value={formData.city} onChange={(e) => updateField("city", e.target.value)} required />
-                  <Select label="State" value={formData.state} onChange={(e) => updateField("state", e.target.value)} options={US_STATES.map((s) => ({ value: s.value, label: s.label }))} placeholder="Select" />
-                  <Input label="ZIP Code" value={formData.zipCode} onChange={(e) => updateField("zipCode", e.target.value)} />
+                  <Input label={t.profile.city} value={formData.city} onChange={(e) => updateField("city", e.target.value)} required />
+                  <Select label={t.profile.state} value={formData.state} onChange={(e) => updateField("state", e.target.value)} options={US_STATES.map((s) => ({ value: s.value, label: s.label }))} placeholder="Select" />
+                  <Input label={t.profile.zipCode} value={formData.zipCode} onChange={(e) => updateField("zipCode", e.target.value)} />
                 </div>
-                <Input label="Phone" value={formData.phone} onChange={(e) => updateField("phone", e.target.value)} placeholder="(555) 123-4567" />
+                <Input label={t.profile.phone} value={formData.phone} onChange={(e) => updateField("phone", e.target.value)} placeholder="(555) 123-4567" />
               </div>
             </Card>
 
             <Card className="mb-6">
-              <h2 className="text-lg font-bold text-text-primary mb-3">Conference Affiliations</h2>
-              <p className="text-xs text-text-muted mb-3">Select conferences you attend or are affiliated with:</p>
+              <h2 className="text-lg font-bold text-text-primary mb-3">{t.profile.conferenceAffiliations}</h2>
+              <p className="text-xs text-text-muted mb-3">{t.profile.selectConferences}</p>
               <div className="space-y-2">
                 {conferences.map((conf) => {
                   const isSelected = selectedConferences.some((c) => c.conferenceId === conf.id);
@@ -466,7 +468,7 @@ function ProfileContent() {
             </Card>
 
             <div className="flex justify-end">
-              <Button type="submit" isLoading={saving}>Save Changes</Button>
+              <Button type="submit" isLoading={saving}>{t.profile.saveChanges}</Button>
             </div>
           </form>
         </div>
@@ -477,9 +479,9 @@ function ProfileContent() {
         <div className="space-y-6">
           {/* Change Email */}
           <Card>
-            <h2 className="text-lg font-bold text-text-primary mb-4">Change Email</h2>
+            <h2 className="text-lg font-bold text-text-primary mb-4">{t.profile.changeEmail}</h2>
             <p className="text-sm text-text-muted mb-4">
-              Current email: <span className="font-medium text-text-secondary">{session?.user?.email}</span>
+              {t.profile.currentEmail} <span className="font-medium text-text-secondary">{session?.user?.email}</span>
             </p>
 
             {emailError && <div className="mb-4 rounded-md bg-error-light p-3 text-sm text-error">{emailError}</div>}
@@ -487,7 +489,7 @@ function ProfileContent() {
 
             <form onSubmit={handleEmailChange} className="space-y-4 max-w-md">
               <Input
-                label="New Email Address"
+                label={t.profile.newEmailAddress}
                 type="email"
                 value={newEmail}
                 onChange={(e) => setNewEmail(e.target.value)}
@@ -495,48 +497,48 @@ function ProfileContent() {
                 required
               />
               <Input
-                label="Current Password"
+                label={t.profile.currentPassword}
                 type="password"
                 value={emailPassword}
                 onChange={(e) => setEmailPassword(e.target.value)}
-                helperText="Required to verify your identity"
+                helperText={t.profile.verifyIdentity}
                 required
               />
-              <Button type="submit" isLoading={emailLoading}>Update Email</Button>
+              <Button type="submit" isLoading={emailLoading}>{t.profile.updateEmail}</Button>
             </form>
           </Card>
 
           {/* Change Password */}
           <Card>
-            <h2 className="text-lg font-bold text-text-primary mb-4">Change Password</h2>
+            <h2 className="text-lg font-bold text-text-primary mb-4">{t.profile.changePassword}</h2>
 
             {passwordError && <div className="mb-4 rounded-md bg-error-light p-3 text-sm text-error">{passwordError}</div>}
             {passwordSuccess && <div className="mb-4 rounded-md bg-success-light p-3 text-sm text-success">{passwordSuccess}</div>}
 
             <form onSubmit={handlePasswordChange} className="space-y-4 max-w-md">
               <Input
-                label="Current Password"
+                label={t.profile.currentPassword}
                 type="password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 required
               />
               <Input
-                label="New Password"
+                label={t.profile.newPassword}
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                helperText="Must be at least 6 characters"
+                helperText={t.profile.minChars}
                 required
               />
               <Input
-                label="Confirm New Password"
+                label={t.profile.confirmNewPassword}
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
-              <Button type="submit" isLoading={passwordLoading}>Update Password</Button>
+              <Button type="submit" isLoading={passwordLoading}>{t.profile.updatePassword}</Button>
             </form>
           </Card>
         </div>
@@ -548,26 +550,25 @@ function ProfileContent() {
           <Card className="border-error/30">
             <div className="flex items-center gap-2 mb-4">
               <AlertTriangle className="h-5 w-5 text-error" />
-              <h2 className="text-lg font-bold text-error">Delete Account</h2>
+              <h2 className="text-lg font-bold text-error">{t.profile.deleteAccount}</h2>
             </div>
             <p className="text-sm text-text-muted mb-4">
-              This action is permanent and cannot be undone. All your data including your surgeon profile,
-              conference affiliations, and account information will be permanently deleted.
+              {t.profile.deleteWarning}
             </p>
 
             {deleteError && <div className="mb-4 rounded-md bg-error-light p-3 text-sm text-error">{deleteError}</div>}
 
             <form onSubmit={handleDeleteAccount} className="space-y-4 max-w-md">
               <Input
-                label="Your Password"
+                label={t.profile.yourPassword}
                 type="password"
                 value={deletePassword}
                 onChange={(e) => setDeletePassword(e.target.value)}
-                helperText="Enter your password to confirm your identity"
+                helperText={t.profile.enterPasswordConfirm}
                 required
               />
               <Input
-                label='Type "DELETE" to confirm'
+                label={t.profile.typeDelete}
                 value={deleteConfirm}
                 onChange={(e) => setDeleteConfirm(e.target.value)}
                 placeholder="DELETE"
@@ -578,7 +579,7 @@ function ProfileContent() {
                 isLoading={deleteLoading}
                 className="!bg-error hover:!bg-red-600 !shadow-none"
               >
-                Permanently Delete Account
+                {t.profile.permanentlyDelete}
               </Button>
             </form>
           </Card>

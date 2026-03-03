@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import Card from "@/components/ui/Card";
 import Spinner from "@/components/ui/Spinner";
 import { Users, TrendingUp, BarChart3, Calendar } from "lucide-react";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function AdminDashboard() {
+  const { t } = useLanguage();
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -24,7 +26,7 @@ export default function AdminDashboard() {
   return (
     <div>
       <h1 className="text-3xl font-bold text-text-primary mb-6">
-        Admin Dashboard
+        {t.admin.dashboard}
       </h1>
 
       {/* KPI Cards */}
@@ -36,7 +38,7 @@ export default function AdminDashboard() {
             </div>
             <div>
               <p className="text-2xl font-bold text-text-primary">{stats?.totalSurgeons || 0}</p>
-              <p className="text-xs text-text-muted">Total Surgeons</p>
+              <p className="text-xs text-text-muted">{t.admin.totalSurgeons}</p>
             </div>
           </div>
         </Card>
@@ -47,7 +49,7 @@ export default function AdminDashboard() {
             </div>
             <div>
               <p className="text-2xl font-bold text-text-primary">{stats?.newThisWeek || 0}</p>
-              <p className="text-xs text-text-muted">New This Week</p>
+              <p className="text-xs text-text-muted">{t.admin.newThisWeek}</p>
             </div>
           </div>
         </Card>
@@ -58,7 +60,7 @@ export default function AdminDashboard() {
             </div>
             <div>
               <p className="text-2xl font-bold text-text-primary">{stats?.newThisMonth || 0}</p>
-              <p className="text-xs text-text-muted">New This Month</p>
+              <p className="text-xs text-text-muted">{t.admin.newThisMonth}</p>
             </div>
           </div>
         </Card>
@@ -69,7 +71,7 @@ export default function AdminDashboard() {
             </div>
             <div>
               <p className="text-2xl font-bold text-text-primary">{stats?.bySpecialty?.length || 0}</p>
-              <p className="text-xs text-text-muted">Specialties</p>
+              <p className="text-xs text-text-muted">{t.admin.specialties}</p>
             </div>
           </div>
         </Card>
@@ -78,7 +80,7 @@ export default function AdminDashboard() {
       <div className="grid gap-6 lg:grid-cols-2">
         {/* By Specialty */}
         <Card>
-          <h2 className="text-lg font-bold text-text-primary mb-4">Surgeons by Specialty</h2>
+          <h2 className="text-lg font-bold text-text-primary mb-4">{t.admin.surgeonsBySpecialty}</h2>
           {stats?.bySpecialty?.length > 0 ? (
             <div className="space-y-3">
               {stats.bySpecialty.map((item: any) => (
@@ -97,13 +99,13 @@ export default function AdminDashboard() {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-text-muted">No data yet</p>
+            <p className="text-sm text-text-muted">{t.admin.noDataYet}</p>
           )}
         </Card>
 
         {/* By State */}
         <Card>
-          <h2 className="text-lg font-bold text-text-primary mb-4">Top States</h2>
+          <h2 className="text-lg font-bold text-text-primary mb-4">{t.admin.topStates}</h2>
           {stats?.byState?.length > 0 ? (
             <div className="space-y-3">
               {stats.byState.slice(0, 10).map((item: any) => (
@@ -122,13 +124,13 @@ export default function AdminDashboard() {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-text-muted">No data yet</p>
+            <p className="text-sm text-text-muted">{t.admin.noDataYet}</p>
           )}
         </Card>
 
         {/* By Conference */}
         <Card className="lg:col-span-2">
-          <h2 className="text-lg font-bold text-text-primary mb-4">Conference Affiliations</h2>
+          <h2 className="text-lg font-bold text-text-primary mb-4">{t.admin.conferenceAffiliations}</h2>
           {stats?.byConference?.length > 0 ? (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {stats.byConference.map((item: any) => (
@@ -139,7 +141,7 @@ export default function AdminDashboard() {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-text-muted">No data yet</p>
+            <p className="text-sm text-text-muted">{t.admin.noDataYet}</p>
           )}
         </Card>
       </div>

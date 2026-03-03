@@ -4,22 +4,24 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BarChart3, Database, Download, BookOpen, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const navItems = [
-  { href: "/admin", label: "Overview", icon: BarChart3, exact: true },
-  { href: "/admin/surgeons", label: "All Surgeons", icon: Database },
-  { href: "/admin/conferences", label: "Conferences", icon: BookOpen },
-  { href: "/admin/export", label: "Export Data", icon: Download },
-];
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function AdminSidebar({ className }: { className?: string }) {
   const pathname = usePathname();
+  const { t } = useLanguage();
+
+  const navItems = [
+    { href: "/admin", label: t.admin.overview, icon: BarChart3, exact: true },
+    { href: "/admin/surgeons", label: t.admin.allSurgeons, icon: Database },
+    { href: "/admin/conferences", label: t.admin.conferences, icon: BookOpen },
+    { href: "/admin/export", label: t.admin.exportData, icon: Download },
+  ];
 
   return (
     <aside className={cn("fixed left-0 top-16 bottom-0 w-64 border-r border-border bg-surface-light overflow-y-auto", className)}>
       <div className="p-4">
         <div className="mb-4 rounded-xl bg-primary-500/15 px-3 py-2">
-          <p className="text-xs font-bold text-primary-400 uppercase tracking-wider">Admin Panel</p>
+          <p className="text-xs font-bold text-primary-400 uppercase tracking-wider">{t.nav.adminPanel}</p>
         </div>
         <nav className="flex flex-col gap-1">
           {navItems.map((item) => {
@@ -48,7 +50,7 @@ export default function AdminSidebar({ className }: { className?: string }) {
           href="/dashboard"
           className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm text-text-muted hover:bg-surface-white hover:text-text-primary"
         >
-          <ArrowLeft className="h-4 w-4" /> Back to App
+          <ArrowLeft className="h-4 w-4" /> {t.admin.backToApp}
         </Link>
       </div>
     </aside>

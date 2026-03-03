@@ -9,10 +9,12 @@ import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import Spinner from "@/components/ui/Spinner";
 import { MapPin, Phone, Mail, Building2, Award, Calendar, Pencil } from "lucide-react";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function SurgeonProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const { data: session } = useSession();
+  const { t } = useLanguage();
   const [surgeon, setSurgeon] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -37,9 +39,9 @@ export default function SurgeonProfilePage({ params }: { params: Promise<{ id: s
   if (!surgeon) {
     return (
       <div className="text-center py-12">
-        <h2 className="text-xl font-bold text-text-primary">Surgeon not found</h2>
+        <h2 className="text-xl font-bold text-text-primary">{t.surgeon.notFound}</h2>
         <Link href="/directory" className="text-primary-500 hover:text-primary-600 text-sm mt-2 inline-block font-semibold">
-          Back to directory
+          {t.surgeon.backToDirectory}
         </Link>
       </div>
     );
@@ -64,7 +66,7 @@ export default function SurgeonProfilePage({ params }: { params: Promise<{ id: s
             {isOwnProfile && (
               <Link href="/profile">
                 <Button variant="secondary" size="sm">
-                  <Pencil className="h-4 w-4 mr-1" /> Edit Profile
+                  <Pencil className="h-4 w-4 mr-1" /> {t.surgeon.editProfile}
                 </Button>
               </Link>
             )}
@@ -79,8 +81,8 @@ export default function SurgeonProfilePage({ params }: { params: Promise<{ id: s
           )}
 
           <div className="flex flex-wrap gap-2 mt-3">
-            {surgeon.boardCertified && <Badge variant="green">Board Certified</Badge>}
-            {surgeon.fellowshipTrained && <Badge variant="purple">Fellowship Trained</Badge>}
+            {surgeon.boardCertified && <Badge variant="green">{t.surgeon.boardCertified}</Badge>}
+            {surgeon.fellowshipTrained && <Badge variant="purple">{t.surgeon.fellowshipTrained}</Badge>}
           </div>
 
           <div className="flex flex-wrap gap-4 mt-4 text-sm text-text-muted">
@@ -110,22 +112,22 @@ export default function SurgeonProfilePage({ params }: { params: Promise<{ id: s
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
-            <Award className="h-5 w-5 text-primary-500" /> Professional Details
+            <Award className="h-5 w-5 text-primary-500" /> {t.surgeon.professionalDetails}
           </h2>
           <dl className="space-y-3">
             <div>
-              <dt className="text-xs font-semibold text-text-muted uppercase tracking-wide">NPI Number</dt>
+              <dt className="text-xs font-semibold text-text-muted uppercase tracking-wide">{t.surgeon.npiNumber}</dt>
               <dd className="text-sm text-text-primary mt-0.5">{surgeon.npiNumber}</dd>
             </div>
             {surgeon.hospitalAffiliation && (
               <div>
-                <dt className="text-xs font-semibold text-text-muted uppercase tracking-wide">Hospital Affiliation</dt>
+                <dt className="text-xs font-semibold text-text-muted uppercase tracking-wide">{t.surgeon.hospitalAffiliation}</dt>
                 <dd className="text-sm text-text-primary mt-0.5">{surgeon.hospitalAffiliation}</dd>
               </div>
             )}
             {surgeon.yearsInPractice && (
               <div>
-                <dt className="text-xs font-semibold text-text-muted uppercase tracking-wide">Years in Practice</dt>
+                <dt className="text-xs font-semibold text-text-muted uppercase tracking-wide">{t.surgeon.yearsInPractice}</dt>
                 <dd className="text-sm text-text-primary mt-0.5">{surgeon.yearsInPractice}</dd>
               </div>
             )}
@@ -134,7 +136,7 @@ export default function SurgeonProfilePage({ params }: { params: Promise<{ id: s
 
         <Card>
           <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-primary-500" /> Conference Affiliations
+            <Calendar className="h-5 w-5 text-primary-500" /> {t.surgeon.conferenceAffiliations}
           </h2>
           {surgeon.conferences?.length > 0 ? (
             <div className="space-y-2">
@@ -149,7 +151,7 @@ export default function SurgeonProfilePage({ params }: { params: Promise<{ id: s
               ))}
             </div>
           ) : (
-            <p className="text-sm text-text-muted">No conference affiliations listed</p>
+            <p className="text-sm text-text-muted">{t.surgeon.noConferences}</p>
           )}
         </Card>
       </div>

@@ -6,6 +6,7 @@ import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Spinner from "@/components/ui/Spinner";
 import { BookOpen, Plus, Trash2 } from "lucide-react";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 interface Conference {
   id: string;
@@ -17,6 +18,7 @@ interface Conference {
 }
 
 export default function ConferenceManagementPage() {
+  const { t } = useLanguage();
   const [conferences, setConferences] = useState<Conference[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -58,23 +60,23 @@ export default function ConferenceManagementPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Failed to create conference");
+        setError(data.error || t.admin.failedCreate);
         return;
       }
 
-      setSuccess("Conference created successfully");
+      setSuccess(t.admin.conferenceCreated);
       setFormData({ name: "", fullName: "", description: "", website: "" });
       setShowForm(false);
       fetchConferences();
     } catch {
-      setError("Something went wrong");
+      setError(t.admin.somethingWrong);
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete "${name}"? This will remove all surgeon affiliations with this conference.`)) {
+    if (!confirm(t.admin.deleteConfirm.replace("{name}", name))) {
       return;
     }
 
@@ -87,13 +89,13 @@ export default function ConferenceManagementPage() {
 
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error || "Failed to delete conference");
+        setError(data.error || t.admin.failedDelete);
         return;
       }
 
       fetchConferences();
     } catch {
-      setError("Something went wrong");
+      setError(t.admin.somethingWrong);
     }
   };
 
@@ -107,12 +109,12 @@ export default function ConferenceManagementPage() {
         <div>
           <h1 className="text-2xl font-bold text-text-primary flex items-center gap-2">
             <BookOpen className="h-7 w-7 text-primary-500" />
-            Conferences
+            {t.admin.conferences}
           </h1>
-          <p className="text-sm text-text-muted mt-1">{conferences.length} conferences</p>
+          <p className="text-sm text-text-muted mt-1">{conferences.length} {t.admin.conferences.toLowerCase()}</p>
         </div>
         <Button onClick={() => setShowForm(!showForm)} size="sm">
-          <Plus className="h-4 w-4 mr-2" /> Add Conference
+          <Plus className="h-4 w-4 mr-2" /> {t.admin.addConference}
         </Button>
       </div>
 
@@ -125,41 +127,41 @@ export default function ConferenceManagementPage() {
 
       {showForm && (
         <Card className="mb-6">
-          <h2 className="text-lg font-semibold text-text-primary mb-4">New Conference</h2>
+          <h2 className="text-lg font-semibold text-text-primary mb-4">{t.admin.newConference}</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
-                label="Short Name"
+                label={t.admin.shortName}
                 value={formData.name}
                 onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
-                placeholder="e.g., NASS"
+                placeholder={t.admin.shortNamePlaceholder}
                 required
               />
               <Input
-                label="Full Name"
+                label={t.admin.fullName}
                 value={formData.fullName}
                 onChange={(e) => setFormData((p) => ({ ...p, fullName: e.target.value }))}
-                placeholder="e.g., North American Spine Society"
+                placeholder={t.admin.fullNamePlaceholder}
                 required
               />
             </div>
             <Input
-              label="Description"
+              label={t.admin.description}
               value={formData.description}
               onChange={(e) => setFormData((p) => ({ ...p, description: e.target.value }))}
-              placeholder="Optional description"
+              placeholder={t.admin.descriptionPlaceholder}
             />
             <Input
-              label="Website"
+              label={t.admin.website}
               value={formData.website}
               onChange={(e) => setFormData((p) => ({ ...p, website: e.target.value }))}
-              placeholder="https://..."
+              placeholder={t.admin.websitePlaceholder}
             />
             <div className="flex gap-3 justify-end">
               <Button type="button" variant="secondary" onClick={() => setShowForm(false)}>
-                Cancel
+                {t.admin.cancel}
               </Button>
-              <Button type="submit" isLoading={saving}>Create Conference</Button>
+              <Button type="submit" isLoading={saving}>{t.admin.createConference}</Button>
             </div>
           </form>
         </Card>
@@ -170,11 +172,11 @@ export default function ConferenceManagementPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-surface-light">
-                <th className="px-4 py-3 text-left font-medium text-text-muted">Name</th>
-                <th className="px-4 py-3 text-left font-medium text-text-muted">Full Name</th>
-                <th className="px-4 py-3 text-left font-medium text-text-muted">Description</th>
-                <th className="px-4 py-3 text-center font-medium text-text-muted">Surgeons</th>
-                <th className="px-4 py-3 text-center font-medium text-text-muted">Actions</th>
+                <th className="px-4 py-3 text-left font-medium text-text-muted">{t.admin.name}</th>
+                <th className="px-4 py-3 text-left font-medium text-text-muted">{t.admin.fullName}</th>
+                <th className="px-4 py-3 text-left font-medium text-text-muted">{t.admin.description}</th>
+                <th className="px-4 py-3 text-center font-medium text-text-muted">{t.admin.surgeons}</th>
+                <th className="px-4 py-3 text-center font-medium text-text-muted">{t.admin.actions}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -202,7 +204,7 @@ export default function ConferenceManagementPage() {
               {conferences.length === 0 && (
                 <tr>
                   <td colSpan={5} className="px-4 py-8 text-center text-text-muted">
-                    No conferences yet. Click &ldquo;Add Conference&rdquo; to create one.
+                    {t.admin.noConferencesYet}
                   </td>
                 </tr>
               )}

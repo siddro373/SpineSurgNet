@@ -9,9 +9,11 @@ import Pagination from "@/components/ui/Pagination";
 import Spinner from "@/components/ui/Spinner";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Users } from "lucide-react";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 function DirectoryContent() {
   const searchParams = useSearchParams();
+  const { t } = useLanguage();
 
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [specialty, setSpecialty] = useState(searchParams.get("specialty") || "");
@@ -70,7 +72,7 @@ function DirectoryContent() {
         <SearchInput
           value={search}
           onChange={setSearch}
-          placeholder="Search by name or NPI..."
+          placeholder={t.directory.searchPlaceholder}
           className="max-w-md"
         />
       </div>
@@ -94,14 +96,14 @@ function DirectoryContent() {
       ) : surgeons.length === 0 ? (
         <div className="text-center py-12">
           <Users className="mx-auto h-12 w-12 text-text-light" />
-          <h3 className="mt-4 text-lg font-medium text-text-primary">No surgeons found</h3>
+          <h3 className="mt-4 text-lg font-medium text-text-primary">{t.directory.noSurgeonsFound}</h3>
           <p className="mt-1 text-sm text-text-muted">
-            Try adjusting your search or filters
+            {t.directory.tryAdjusting}
           </p>
         </div>
       ) : (
         <>
-          <p className="mb-4 text-sm text-text-muted">{total} surgeon{total !== 1 ? "s" : ""} found</p>
+          <p className="mb-4 text-sm text-text-muted">{total} {t.directory.surgeonsFound}</p>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {surgeons.map((surgeon) => (
               <SurgeonCard key={surgeon.id} surgeon={surgeon} />
@@ -117,14 +119,16 @@ function DirectoryContent() {
 }
 
 export default function DirectoryPage() {
+  const { t } = useLanguage();
+
   return (
     <div>
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-text-primary">
-          Surgeon Directory
+          {t.directory.title}
         </h1>
         <p className="text-text-muted mt-1">
-          Connect with spine surgery specialists
+          {t.directory.subtitle}
         </p>
       </div>
 

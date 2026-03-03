@@ -10,6 +10,7 @@ import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import { SPECIALTIES, SUB_SPECIALTIES, US_STATES, CONFERENCE_ROLES } from "@/lib/constants";
 import { validateNPI } from "@/lib/npi";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 interface ConferenceOption {
   id: string;
@@ -23,20 +24,21 @@ interface SelectedConference {
   role: string;
 }
 
-const steps = [
-  "Account",
-  "Identity",
-  "Professional",
-  "Location",
-  "Conferences",
-];
-
 export default function RegisterPage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [conferences, setConferences] = useState<ConferenceOption[]>([]);
+
+  const steps = [
+    t.register.stepAccount,
+    t.register.stepIdentity,
+    t.register.stepProfessional,
+    t.register.stepLocation,
+    t.register.stepConferences,
+  ];
 
   // Form state
   const [formData, setFormData] = useState({
@@ -93,23 +95,23 @@ export default function RegisterPage() {
   const validateStep = (): string | null => {
     switch (currentStep) {
       case 0:
-        if (!formData.email) return "Email is required";
-        if (!/\S+@\S+\.\S+/.test(formData.email)) return "Invalid email format";
-        if (formData.password.length < 6) return "Password must be at least 6 characters";
-        if (formData.password !== formData.confirmPassword) return "Passwords do not match";
+        if (!formData.email) return t.register.emailRequired;
+        if (!/\S+@\S+\.\S+/.test(formData.email)) return t.register.invalidEmail;
+        if (formData.password.length < 6) return t.register.passwordMinLength;
+        if (formData.password !== formData.confirmPassword) return t.register.passwordsNoMatch;
         return null;
       case 1:
-        if (!formData.firstName) return "First name is required";
-        if (!formData.lastName) return "Last name is required";
-        if (!formData.npiNumber) return "NPI number is required";
-        if (!validateNPI(formData.npiNumber)) return "Invalid NPI number";
+        if (!formData.firstName) return t.register.firstNameRequired;
+        if (!formData.lastName) return t.register.lastNameRequired;
+        if (!formData.npiNumber) return t.register.npiRequired;
+        if (!validateNPI(formData.npiNumber)) return t.register.npiInvalidError;
         return null;
       case 2:
-        if (!formData.specialty) return "Specialty is required";
+        if (!formData.specialty) return t.register.specialtyRequired;
         return null;
       case 3:
-        if (!formData.city) return "City is required";
-        if (!formData.state) return "State is required";
+        if (!formData.city) return t.register.cityRequired;
+        if (!formData.state) return t.register.stateRequired;
         return null;
       case 4:
         return null;
@@ -153,13 +155,13 @@ export default function RegisterPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Registration failed");
+        setError(data.error || t.register.registrationFailed);
         return;
       }
 
       router.push("/login?registered=true");
     } catch {
-      setError("Something went wrong. Please try again.");
+      setError(t.register.somethingWrong);
     } finally {
       setLoading(false);
     }
@@ -190,11 +192,11 @@ export default function RegisterPage() {
       </div>
 
       <h2 className="mb-4 text-lg font-bold text-text-primary">
-        {currentStep === 0 && "Create Your Account"}
-        {currentStep === 1 && "Your Identity"}
-        {currentStep === 2 && "Professional Details"}
-        {currentStep === 3 && "Practice Location"}
-        {currentStep === 4 && "Conference Affiliations"}
+        {currentStep === 0 && t.register.createAccount}
+        {currentStep === 1 && t.register.yourIdentity}
+        {currentStep === 2 && t.register.professionalDetails}
+        {currentStep === 3 && t.register.practiceLocation}
+        {currentStep === 4 && t.register.conferenceAffiliations}
       </h2>
 
       {error && (
@@ -207,25 +209,25 @@ export default function RegisterPage() {
       {currentStep === 0 && (
         <div className="space-y-4">
           <Input
-            label="Email Address"
+            label={t.register.emailAddress}
             type="email"
             value={formData.email}
             onChange={(e) => updateField("email", e.target.value)}
-            placeholder="you@hospital.com"
+            placeholder={t.register.emailPlaceholder}
           />
           <Input
-            label="Password"
+            label={t.register.password}
             type="password"
             value={formData.password}
             onChange={(e) => updateField("password", e.target.value)}
-            placeholder="At least 6 characters"
+            placeholder={t.register.passwordPlaceholder}
           />
           <Input
-            label="Confirm Password"
+            label={t.register.confirmPassword}
             type="password"
             value={formData.confirmPassword}
             onChange={(e) => updateField("confirmPassword", e.target.value)}
-            placeholder="Confirm your password"
+            placeholder={t.register.confirmPlaceholder}
           />
         </div>
       )}
@@ -235,28 +237,28 @@ export default function RegisterPage() {
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <Input
-              label="First Name"
+              label={t.register.firstName}
               value={formData.firstName}
               onChange={(e) => updateField("firstName", e.target.value)}
-              placeholder="John"
+              placeholder={t.register.firstNamePlaceholder}
             />
             <Input
-              label="Last Name"
+              label={t.register.lastName}
               value={formData.lastName}
               onChange={(e) => updateField("lastName", e.target.value)}
-              placeholder="Smith"
+              placeholder={t.register.lastNamePlaceholder}
             />
           </div>
           <Input
-            label="NPI Number"
+            label={t.register.npiNumber}
             value={formData.npiNumber}
             onChange={(e) => updateField("npiNumber", e.target.value.replace(/\D/g, "").slice(0, 10))}
-            placeholder="10-digit NPI number"
-            helperText="Your National Provider Identifier"
-            error={npiValid === false ? "Invalid NPI number" : undefined}
+            placeholder={t.register.npiPlaceholder}
+            helperText={t.register.npiHelper}
+            error={npiValid === false ? t.register.npiInvalid : undefined}
           />
           {npiValid === true && (
-            <p className="text-xs text-success font-medium">Valid NPI number</p>
+            <p className="text-xs text-success font-medium">{t.register.npiValid}</p>
           )}
         </div>
       )}
@@ -265,18 +267,18 @@ export default function RegisterPage() {
       {currentStep === 2 && (
         <div className="space-y-4">
           <Select
-            label="Specialty"
+            label={t.register.specialty}
             value={formData.specialty}
             onChange={(e) => updateField("specialty", e.target.value)}
             options={SPECIALTIES.map((s) => ({ value: s, label: s }))}
-            placeholder="Select your specialty"
+            placeholder={t.register.selectSpecialty}
           />
           <Select
-            label="Sub-specialty (Optional)"
+            label={t.register.subSpecialty}
             value={formData.subSpecialty}
             onChange={(e) => updateField("subSpecialty", e.target.value)}
             options={SUB_SPECIALTIES.map((s) => ({ value: s, label: s }))}
-            placeholder="Select sub-specialty"
+            placeholder={t.register.selectSubSpecialty}
           />
           <div className="flex gap-6">
             <label className="flex items-center gap-2 text-sm text-text-secondary cursor-pointer">
@@ -286,7 +288,7 @@ export default function RegisterPage() {
                 onChange={(e) => updateField("boardCertified", e.target.checked)}
                 className="h-4 w-4 rounded border-border text-primary-500 focus:ring-primary-400"
               />
-              Board Certified
+              {t.register.boardCertified}
             </label>
             <label className="flex items-center gap-2 text-sm text-text-secondary cursor-pointer">
               <input
@@ -295,7 +297,7 @@ export default function RegisterPage() {
                 onChange={(e) => updateField("fellowshipTrained", e.target.checked)}
                 className="h-4 w-4 rounded border-border text-primary-500 focus:ring-primary-400"
               />
-              Fellowship Trained
+              {t.register.fellowshipTrained}
             </label>
           </div>
         </div>
@@ -305,38 +307,38 @@ export default function RegisterPage() {
       {currentStep === 3 && (
         <div className="space-y-4">
           <Input
-            label="Practice Name (Optional)"
+            label={t.register.practiceNameOptional}
             value={formData.practiceName}
             onChange={(e) => updateField("practiceName", e.target.value)}
-            placeholder="e.g., Texas Spine & Scoliosis"
+            placeholder={t.register.practiceNamePlaceholder}
           />
           <div className="grid grid-cols-2 gap-4">
             <Input
-              label="City"
+              label={t.register.city}
               value={formData.city}
               onChange={(e) => updateField("city", e.target.value)}
-              placeholder="Houston"
+              placeholder={t.register.cityPlaceholder}
             />
             <Select
-              label="State"
+              label={t.register.state}
               value={formData.state}
               onChange={(e) => updateField("state", e.target.value)}
               options={US_STATES.map((s) => ({ value: s.value, label: s.label }))}
-              placeholder="Select state"
+              placeholder={t.register.selectState}
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <Input
-              label="ZIP Code (Optional)"
+              label={t.register.zipOptional}
               value={formData.zipCode}
               onChange={(e) => updateField("zipCode", e.target.value.replace(/\D/g, "").slice(0, 5))}
-              placeholder="77001"
+              placeholder={t.register.zipPlaceholder}
             />
             <Input
-              label="Phone (Optional)"
+              label={t.register.phoneOptional}
               value={formData.phone}
               onChange={(e) => updateField("phone", e.target.value)}
-              placeholder="(555) 123-4567"
+              placeholder={t.register.phonePlaceholder}
             />
           </div>
         </div>
@@ -346,7 +348,7 @@ export default function RegisterPage() {
       {currentStep === 4 && (
         <div className="space-y-4">
           <p className="text-sm text-text-muted">
-            Select conferences you attend or are affiliated with (optional):
+            {t.register.selectConferencesOptional}
           </p>
           <div className="space-y-3">
             {conferences.map((conf) => {
@@ -400,26 +402,26 @@ export default function RegisterPage() {
       <div className="mt-6 flex justify-between">
         {currentStep > 0 ? (
           <Button variant="secondary" onClick={handleBack}>
-            Back
+            {t.register.back}
           </Button>
         ) : (
           <div />
         )}
 
         {currentStep < steps.length - 1 ? (
-          <Button onClick={handleNext}>Next</Button>
+          <Button onClick={handleNext}>{t.register.next}</Button>
         ) : (
           <Button onClick={handleSubmit} isLoading={loading}>
-            Complete Registration
+            {t.register.completeRegistration}
           </Button>
         )}
       </div>
 
       {currentStep === 0 && (
         <p className="mt-6 text-center text-sm text-text-muted">
-          Already have an account?{" "}
+          {t.register.haveAccount}{" "}
           <Link href="/login" className="font-medium text-primary-500 hover:text-primary-600">
-            Sign in
+            {t.register.signIn}
           </Link>
         </p>
       )}

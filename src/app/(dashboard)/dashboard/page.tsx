@@ -7,9 +7,11 @@ import Card from "@/components/ui/Card";
 import Avatar from "@/components/ui/Avatar";
 import Spinner from "@/components/ui/Spinner";
 import { Users, MapPin, BookOpen, Stethoscope, ArrowRight } from "lucide-react";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function DashboardPage() {
   const { data: session } = useSession();
+  const { t } = useLanguage();
   const [recentSurgeons, setRecentSurgeons] = useState<any[]>([]);
   const [stats, setStats] = useState({
     total: 0,
@@ -18,8 +20,6 @@ export default function DashboardPage() {
     totalConferences: 0,
   });
   const [loading, setLoading] = useState(true);
-
-  const userName = session?.user?.name || "Surgeon";
 
   useEffect(() => {
     async function fetchData() {
@@ -53,10 +53,10 @@ export default function DashboardPage() {
           backgroundSize: "30px 30px"
         }} />
         <div className="relative">
-          <p className="text-primary-400 text-sm font-medium">Welcome back</p>
-          <h1 className="text-3xl font-bold mt-1">Dr. {userName.split(" ").pop()}</h1>
+          <p className="text-primary-400 text-sm font-medium">{t.dashboard.welcomeBack}</p>
+          <h1 className="text-3xl font-bold mt-1">{t.dashboard.drShetgeri}</h1>
           <p className="mt-2 text-text-muted text-sm max-w-sm">
-            Stay connected with the spine surgery community.
+            {t.dashboard.tagline}
           </p>
         </div>
       </div>
@@ -70,7 +70,7 @@ export default function DashboardPage() {
             </div>
             <div>
               <p className="text-3xl font-bold text-text-primary">{stats.total}</p>
-              <p className="text-xs font-medium text-text-muted uppercase tracking-wide">Total Surgeons</p>
+              <p className="text-xs font-medium text-text-muted uppercase tracking-wide">{t.dashboard.totalSurgeons}</p>
             </div>
           </div>
         </Card>
@@ -81,7 +81,7 @@ export default function DashboardPage() {
             </div>
             <div>
               <p className="text-3xl font-bold text-text-primary">{stats.inSpecialty}</p>
-              <p className="text-xs font-medium text-text-muted uppercase tracking-wide">In My Specialty</p>
+              <p className="text-xs font-medium text-text-muted uppercase tracking-wide">{t.dashboard.inMySpecialty}</p>
             </div>
           </div>
         </Card>
@@ -92,7 +92,7 @@ export default function DashboardPage() {
             </div>
             <div>
               <p className="text-3xl font-bold text-text-primary">{stats.inState}</p>
-              <p className="text-xs font-medium text-text-muted uppercase tracking-wide">In My State</p>
+              <p className="text-xs font-medium text-text-muted uppercase tracking-wide">{t.dashboard.inMyState}</p>
             </div>
           </div>
         </Card>
@@ -103,7 +103,7 @@ export default function DashboardPage() {
             </div>
             <div>
               <p className="text-3xl font-bold text-text-primary">{stats.totalConferences}</p>
-              <p className="text-xs font-medium text-text-muted uppercase tracking-wide">Conferences</p>
+              <p className="text-xs font-medium text-text-muted uppercase tracking-wide">{t.dashboard.conferences}</p>
             </div>
           </div>
         </Card>
@@ -112,16 +112,16 @@ export default function DashboardPage() {
       {/* Recent surgeons */}
       <Card>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-text-primary">Recently Joined</h2>
+          <h2 className="text-lg font-bold text-text-primary">{t.dashboard.recentlyJoined}</h2>
           <Link href="/directory" className="text-sm font-semibold text-primary-500 hover:text-primary-600 flex items-center gap-1">
-            View all <ArrowRight className="h-4 w-4" />
+            {t.dashboard.viewAll} <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
         {loading ? (
           <div className="flex justify-center py-8"><Spinner /></div>
         ) : recentSurgeons.length === 0 ? (
-          <p className="text-sm text-text-muted py-4 text-center">No surgeons registered yet. Be the first!</p>
+          <p className="text-sm text-text-muted py-4 text-center">{t.dashboard.noSurgeonsYet}</p>
         ) : (
           <div className="grid gap-3 sm:grid-cols-2">
             {recentSurgeons.map((surgeon) => (
@@ -146,9 +146,9 @@ export default function DashboardPage() {
             <span className="text-lg font-black text-white">U</span>
           </div>
           <div>
-            <h3 className="font-bold text-text-primary">Ulrich Medical USA</h3>
+            <h3 className="font-bold text-text-primary">{t.dashboard.ulrichMedical}</h3>
             <p className="text-sm text-text-muted mt-0.5">
-              Explore the latest spine implant systems and surgical solutions.
+              {t.dashboard.ulrichTagline}
             </p>
           </div>
         </div>

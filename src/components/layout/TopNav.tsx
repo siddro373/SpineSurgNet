@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Search, Bell, LogOut, User, Settings, Shield } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Avatar from "@/components/ui/Avatar";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 interface TopNavProps {
   user?: {
@@ -17,6 +18,7 @@ interface TopNavProps {
 }
 
 export default function TopNav({ user }: TopNavProps) {
+  const { lang, setLang, t } = useLanguage();
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -64,7 +66,7 @@ export default function TopNav({ user }: TopNavProps) {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search surgeons..."
+            placeholder={t.nav.searchSurgeons}
             className="h-10 w-full rounded-full border border-border bg-surface-white pl-10 pr-4 text-sm text-text-primary placeholder:text-text-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 transition-colors hover:border-border-dark"
           />
         </form>
@@ -78,8 +80,32 @@ export default function TopNav({ user }: TopNavProps) {
         <Search className="h-5 w-5" />
       </button>
 
-      {/* Right: Notifications + User */}
+      {/* Right: Language toggle + Notifications + User */}
       <div className="flex items-center gap-2 ml-auto md:ml-0">
+        {/* EN/DE Language toggle */}
+        <div className="flex rounded-full border border-border overflow-hidden">
+          <button
+            onClick={() => setLang("en")}
+            className={`px-2.5 py-1.5 text-xs font-bold transition-colors ${
+              lang === "en"
+                ? "bg-primary-500 text-secondary-700"
+                : "text-text-muted hover:text-text-primary"
+            }`}
+          >
+            EN
+          </button>
+          <button
+            onClick={() => setLang("de")}
+            className={`px-2.5 py-1.5 text-xs font-bold transition-colors ${
+              lang === "de"
+                ? "bg-primary-500 text-secondary-700"
+                : "text-text-muted hover:text-text-primary"
+            }`}
+          >
+            DE
+          </button>
+        </div>
+
         <button className="relative rounded-full p-2 text-text-muted hover:bg-surface hover:text-text-primary transition-colors">
           <Bell className="h-5 w-5" />
           <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-primary-500" />
@@ -101,14 +127,14 @@ export default function TopNav({ user }: TopNavProps) {
                 <p className="text-xs text-text-muted">{user?.email}</p>
               </div>
               <Link href="/profile" className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-text-secondary hover:bg-surface rounded-lg mx-1" onClick={() => setDropdownOpen(false)}>
-                <User className="h-4 w-4" /> My Account
+                <User className="h-4 w-4" /> {t.nav.myAccount}
               </Link>
               <Link href="/profile?tab=security" className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-text-secondary hover:bg-surface rounded-lg mx-1" onClick={() => setDropdownOpen(false)}>
-                <Settings className="h-4 w-4" /> Security
+                <Settings className="h-4 w-4" /> {t.nav.security}
               </Link>
               {user?.role === "admin" && (
                 <Link href="/admin" className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-text-secondary hover:bg-surface rounded-lg mx-1" onClick={() => setDropdownOpen(false)}>
-                  <Shield className="h-4 w-4" /> Admin Panel
+                  <Shield className="h-4 w-4" /> {t.nav.adminPanel}
                 </Link>
               )}
               <hr className="my-1 border-border" />
@@ -119,7 +145,7 @@ export default function TopNav({ user }: TopNavProps) {
                 }}
                 className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-error hover:bg-surface rounded-lg mx-1"
               >
-                <LogOut className="h-4 w-4" /> Sign Out
+                <LogOut className="h-4 w-4" /> {t.nav.signOut}
               </button>
             </div>
           )}
@@ -135,7 +161,7 @@ export default function TopNav({ user }: TopNavProps) {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search surgeons..."
+              placeholder={t.nav.searchSurgeons}
               autoFocus
               className="h-11 w-full rounded-full border border-border bg-surface-white pl-10 pr-4 text-sm text-text-primary transition-colors hover:border-border-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400"
             />
