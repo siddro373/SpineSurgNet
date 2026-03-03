@@ -117,6 +117,13 @@ export const translations = {
       editProfile: "Edit Profile",
     },
 
+    // Auth Layout
+    auth: {
+      tagline: "The Professional Network for Spine Surgeons",
+      registerHere: "Register Here",
+      signIn: "Sign In",
+    },
+
     // Auth - Login
     login: {
       welcomeBack: "Welcome back",
@@ -383,6 +390,13 @@ export const translations = {
       conferenceAffiliations: "Konferenzzugehörigkeiten",
       noConferences: "Keine Konferenzzugehörigkeiten aufgeführt",
       editProfile: "Profil bearbeiten",
+    },
+
+    // Auth Layout
+    auth: {
+      tagline: "Das professionelle Netzwerk für Wirbelsäulenchirurgen",
+      registerHere: "Hier registrieren",
+      signIn: "Anmelden",
     },
 
     // Auth - Login
